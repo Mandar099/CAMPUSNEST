@@ -15,7 +15,7 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 dotenv.config();
 
-const app = express();
+export const app = express();
 const PORT = process.env.PORT || 3001;
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
 
@@ -71,16 +71,23 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
   });
 });
 
-// Start listening
-const server = app.listen(PORT, () => {
-  console.log(`[CampusNest Engine] Server listening on http://localhost:${PORT}`);
-  console.log(`[CampusNest Engine] Admin demo key: campus-admin-secret-2026`);
-});
-
-// Graceful shutdown
-process.on('SIGINT', () => {
-  console.log('\n[CampusNest Engine] Gracefully terminating server...');
-  server.close(() => {
-    process.exit(0);
+// Start listening if executed directly (e.g. standalone server or dev container)
+let server: any = null;
+if (!process.env.VERCEL || process.env.NODE_ENV !== 'production') {
+  server = app.listen(PORT, () => {
+    console.log(`[CampusNest Engine] Server listening on http://localhost:${PORT}`);
+    console.log(`[CampusNest Engine] Admin demo key: campus-admin-secret-2026`);
   });
-});
+
+  // Graceful shutdown
+  process.on('SIGINT', () => {
+    console.log('\n[CampusNest Engine] Gracefully terminating server...');
+    if (server) {
+      server.close(() => {
+        process.exit(0);
+      });
+    }
+  });
+}
+
+export default app;
