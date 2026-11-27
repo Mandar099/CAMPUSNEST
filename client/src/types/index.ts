@@ -15,9 +15,14 @@ export interface Property {
   id: number;
   slug: string;
   name: string;
-  city: 'Moodbidri' | 'Mangaluru' | 'Manipal' | 'Bengaluru' | string;
+  category: string;
+  city: string;
   neighborhood: string;
+  distance_km: number;
+  travel_time: string;
   distance_to_campus: string;
+  address: string;
+  phone: string | null;
   tagline: string;
   description: string;
   starting_rent_inr: number;
@@ -29,12 +34,26 @@ export interface Property {
   room_types: RoomType[];
 }
 
+export type BookingStatus =
+  | 'New Lead'
+  | 'Contacted Owner'
+  | 'Tour Scheduled'
+  | 'Confirmed'
+  | 'Cancelled';
+
+export type TourType = 'On-Site' | 'Virtual' | 'Agent Callback';
+
 export interface Booking {
   id: number;
   reference_code: string;
   property_id: number;
   property_name: string;
   property_city: string;
+  property_category?: string;
+  property_distance_km?: number;
+  property_travel_time?: string;
+  property_address?: string;
+  property_phone?: string | null;
   room_type_id: number;
   room_name: string;
   monthly_rent_inr?: number;
@@ -42,10 +61,10 @@ export interface Booking {
   email: string;
   phone: string;
   applicant_role: 'Student' | 'Guardian' | 'Other';
-  tour_type: 'On-Site' | 'Virtual';
+  tour_type: TourType;
   preferred_move_in: string;
   notes?: string;
-  status: 'Pending' | 'Confirmed' | 'Visited' | 'Cancelled';
+  status: BookingStatus;
   created_at: string;
 }
 
@@ -65,6 +84,8 @@ export interface SystemStats {
   occupied_beds: number;
   occupancy_rate_percent: number;
   total_bookings: number;
+  new_leads: number;
+  active_pipeline: number;
   pending_bookings: number;
   confirmed_bookings: number;
 }
@@ -76,7 +97,7 @@ export interface BookingFormData {
   email: string;
   phone: string;
   applicant_role: 'Student' | 'Guardian' | 'Other';
-  tour_type: 'On-Site' | 'Virtual';
+  tour_type: TourType;
   preferred_move_in: string;
   notes?: string;
 }

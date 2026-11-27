@@ -1,4 +1,4 @@
-import { Property, Booking, CommunityEvent, SystemStats, BookingFormData } from '../types';
+import { Property, Booking, BookingStatus, CommunityEvent, SystemStats, BookingFormData } from '../types';
 
 const API_BASE = import.meta.env.VITE_API_URL || '';
 
@@ -35,7 +35,10 @@ export async function createBooking(payload: BookingFormData): Promise<{ success
   return data;
 }
 
-export async function fetchBookings(adminKey: string = 'campus-admin-secret-2026', filters?: { status?: string; property_id?: number }): Promise<Booking[]> {
+export async function fetchBookings(
+  adminKey: string = 'campus-admin-secret-2026',
+  filters?: { status?: string; property_id?: number }
+): Promise<Booking[]> {
   const params = new URLSearchParams();
   if (filters?.status) params.append('status', filters.status);
   if (filters?.property_id) params.append('property_id', filters.property_id.toString());
@@ -55,7 +58,11 @@ export async function fetchBookings(adminKey: string = 'campus-admin-secret-2026
   return data.bookings;
 }
 
-export async function updateBookingStatus(id: number, status: string, adminKey: string = 'campus-admin-secret-2026'): Promise<{ success: boolean }> {
+export async function updateBookingStatus(
+  id: number,
+  status: BookingStatus,
+  adminKey: string = 'campus-admin-secret-2026'
+): Promise<{ success: boolean; booking_id: number; status: BookingStatus }> {
   const res = await fetch(`${API_BASE}/api/bookings/${id}/status`, {
     method: 'PATCH',
     headers: {
@@ -73,7 +80,12 @@ export async function updateBookingStatus(id: number, status: string, adminKey: 
   return res.json();
 }
 
-export async function updateRoomAvailability(roomId: number, delta?: number, available_count?: number, adminKey: string = 'campus-admin-secret-2026'): Promise<any> {
+export async function updateRoomAvailability(
+  roomId: number,
+  delta?: number,
+  available_count?: number,
+  adminKey: string = 'campus-admin-secret-2026'
+): Promise<any> {
   const res = await fetch(`${API_BASE}/api/properties/rooms/${roomId}/availability`, {
     method: 'PATCH',
     headers: {

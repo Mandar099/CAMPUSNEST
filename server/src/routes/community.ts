@@ -59,7 +59,9 @@ communityRouter.get('/stats', (req: Request, res: Response) => {
     const bookingStats = db.prepare(`
       SELECT 
         COUNT(*) as total_bookings,
-        SUM(CASE WHEN status = 'Pending' THEN 1 ELSE 0 END) as pending_bookings,
+        SUM(CASE WHEN status = 'New Lead' THEN 1 ELSE 0 END) as new_leads,
+        SUM(CASE WHEN status IN ('Contacted Owner', 'Tour Scheduled') THEN 1 ELSE 0 END) as active_pipeline,
+        SUM(CASE WHEN status IN ('New Lead', 'Contacted Owner', 'Tour Scheduled') THEN 1 ELSE 0 END) as pending_bookings,
         SUM(CASE WHEN status = 'Confirmed' THEN 1 ELSE 0 END) as confirmed_bookings
       FROM bookings
     `).get() as any;
@@ -77,6 +79,8 @@ communityRouter.get('/stats', (req: Request, res: Response) => {
       occupied_beds: occupiedBeds,
       occupancy_rate_percent: occupancyRate,
       total_bookings: Number(bookingStats?.total_bookings ?? 0),
+      new_leads: Number(bookingStats?.new_leads ?? 0),
+      active_pipeline: Number(bookingStats?.active_pipeline ?? 0),
       pending_bookings: Number(bookingStats?.pending_bookings ?? 0),
       confirmed_bookings: Number(bookingStats?.confirmed_bookings ?? 0)
     });

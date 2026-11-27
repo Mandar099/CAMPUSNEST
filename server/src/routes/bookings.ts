@@ -6,7 +6,7 @@ import { adminAuth } from '../middleware/adminAuth.js';
 
 export const bookingsRouter = Router();
 
-// Zod Schema for Booking Creation
+// Zod Schema for Booking / Agent Callback Creation
 export const createBookingSchema = z.object({
   property_id: z.number().int().positive({ message: 'Valid property selection is required' }),
   room_type_id: z.number().int().positive({ message: 'Valid room tier selection is required' }),
@@ -16,17 +16,19 @@ export const createBookingSchema = z.object({
   applicant_role: z.enum(['Student', 'Guardian', 'Other'], {
     errorMap: () => ({ message: 'Applicant role must be Student, Guardian, or Other' })
   }),
-  tour_type: z.enum(['On-Site', 'Virtual'], {
-    errorMap: () => ({ message: 'Tour type must be On-Site or Virtual' })
+  tour_type: z.enum(['On-Site', 'Virtual', 'Agent Callback'], {
+    errorMap: () => ({ message: 'Request type must be On-Site, Virtual, or Agent Callback' })
   }),
   preferred_move_in: z.string().min(1, { message: 'Preferred move-in date is required' }),
   notes: z.string().max(500).optional()
 });
 
-// Zod Schema for Updating Booking Status
+// Zod Schema for Updating Agent Lead Workflow Status
 export const updateBookingStatusSchema = z.object({
-  status: z.enum(['Pending', 'Confirmed', 'Visited', 'Cancelled'], {
-    errorMap: () => ({ message: 'Status must be Pending, Confirmed, Visited, or Cancelled' })
+  status: z.enum(['New Lead', 'Contacted Owner', 'Tour Scheduled', 'Confirmed', 'Cancelled'], {
+    errorMap: () => ({
+      message: 'Status must be New Lead, Contacted Owner, Tour Scheduled, Confirmed, or Cancelled'
+    })
   })
 });
 
@@ -36,7 +38,7 @@ function generateReferenceCode(): string {
   return `CN-2026-${rand}`;
 }
 
-// POST /api/bookings - Create new prospective student/guardian booking or tour pass
+// POST /api/bookings - Create new agent-mediated booking or callback pass
 bookingsRouter.post('/', validateBody(createBookingSchema), (req: Request, res: Response): void => {
   try {
     const {
@@ -52,14 +54,18 @@ bookingsRouter.post('/', validateBody(createBookingSchema), (req: Request, res: 
     } = req.body;
 
     // Verify property exists
-    const property = db.prepare('SELECT id, name, city FROM properties WHERE id = ?').get(property_id) as any;
+    const property = db
+      .prepare('SELECT id, name, city, category, distance_km, travel_time, address, phone FROM properties WHERE id = ?')
+      .get(property_id) as any;
     if (!property) {
       res.status(404).json({ error: 'Selected property does not exist' });
       return;
     }
 
     // Verify room type exists and belongs to property
-    const roomType = db.prepare('SELECT id, name, available_count, monthly_rent_inr FROM room_types WHERE id = ? AND property_id = ?').get(room_type_id, property_id) as any;
+    const roomType = db
+      .prepare('SELECT id, name, available_count, monthly_rent_inr FROM room_types WHERE id = ? AND property_id = ?')
+      .get(room_type_id, property_id) as any;
     if (!roomType) {
       res.status(404).json({ error: 'Selected room tier does not exist for this property' });
       return;
@@ -79,7 +85,7 @@ bookingsRouter.post('/', validateBody(createBookingSchema), (req: Request, res: 
       INSERT INTO bookings (
         reference_code, property_id, room_type_id, full_name, email, phone,
         applicant_role, tour_type, preferred_move_in, notes, status, created_at
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending', ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'New Lead', ?)
     `);
 
     const result = insertStmt.run(
@@ -100,13 +106,18 @@ bookingsRouter.post('/', validateBody(createBookingSchema), (req: Request, res: 
 
     res.status(201).json({
       success: true,
-      message: 'Booking reservation pass generated successfully',
+      message: 'Agent-mediated reservation pass generated successfully',
       booking: {
         id: bookingId,
         reference_code: referenceCode,
         property_id,
         property_name: property.name,
         property_city: property.city,
+        property_category: property.category,
+        property_distance_km: Number(property.distance_km),
+        property_travel_time: property.travel_time,
+        property_address: property.address,
+        property_phone: property.phone ?? null,
         room_type_id,
         room_name: roomType.name,
         monthly_rent_inr: Number(roomType.monthly_rent_inr),
@@ -117,7 +128,7 @@ bookingsRouter.post('/', validateBody(createBookingSchema), (req: Request, res: 
         tour_type,
         preferred_move_in,
         notes: notes || '',
-        status: 'Pending',
+        status: 'New Lead',
         created_at: createdAt
       }
     });
@@ -126,7 +137,7 @@ bookingsRouter.post('/', validateBody(createBookingSchema), (req: Request, res: 
   }
 });
 
-// GET /api/bookings - List bookings (Protected / Admin view)
+// GET /api/bookings - List bookings with owner contact details for Agent Operations
 bookingsRouter.get('/', adminAuth, (req: Request, res: Response) => {
   try {
     const { status, property_id } = req.query;
@@ -138,6 +149,11 @@ bookingsRouter.get('/', adminAuth, (req: Request, res: Response) => {
         b.property_id,
         p.name AS property_name,
         p.city AS property_city,
+        p.category AS property_category,
+        p.distance_km AS property_distance_km,
+        p.travel_time AS property_travel_time,
+        p.address AS property_address,
+        p.phone AS property_phone,
         b.room_type_id,
         r.name AS room_name,
         r.monthly_rent_inr,
@@ -178,6 +194,11 @@ bookingsRouter.get('/', adminAuth, (req: Request, res: Response) => {
       property_id: Number(b.property_id),
       property_name: b.property_name,
       property_city: b.property_city,
+      property_category: b.property_category,
+      property_distance_km: Number(b.property_distance_km ?? 0),
+      property_travel_time: b.property_travel_time,
+      property_address: b.property_address,
+      property_phone: b.property_phone ?? null,
       room_type_id: Number(b.room_type_id),
       room_name: b.room_name,
       monthly_rent_inr: Number(b.monthly_rent_inr),
@@ -198,7 +219,7 @@ bookingsRouter.get('/', adminAuth, (req: Request, res: Response) => {
   }
 });
 
-// PATCH /api/bookings/:id/status - Update booking status
+// PATCH /api/bookings/:id/status - Update agent lead status
 bookingsRouter.patch('/:id/status', adminAuth, validateBody(updateBookingStatusSchema), (req: Request, res: Response): void => {
   try {
     const bookingId = Number(req.params.id);

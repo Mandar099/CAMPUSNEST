@@ -20,9 +20,14 @@ function formatProperty(prop: any, rooms: any[]) {
     id: Number(prop.id),
     slug: prop.slug,
     name: prop.name,
+    category: prop.category,
     city: prop.city,
     neighborhood: prop.neighborhood,
+    distance_km: Number(prop.distance_km),
+    travel_time: prop.travel_time,
     distance_to_campus: prop.distance_to_campus,
+    address: prop.address,
+    phone: prop.phone ?? null,
     tagline: prop.tagline,
     description: prop.description,
     starting_rent_inr: Number(prop.starting_rent_inr),
@@ -46,10 +51,10 @@ function formatProperty(prop: any, rooms: any[]) {
   };
 }
 
-// GET /api/properties - Get all properties with room types
+// GET /api/properties - Get all properties ordered by distance from MITE
 propertiesRouter.get('/', (req: Request, res: Response) => {
   try {
-    const rawProperties = db.prepare('SELECT * FROM properties ORDER BY id ASC').all() as any[];
+    const rawProperties = db.prepare('SELECT * FROM properties ORDER BY distance_km ASC, id ASC').all() as any[];
     const rawRooms = db.prepare('SELECT * FROM room_types ORDER BY monthly_rent_inr ASC').all() as any[];
 
     const properties = rawProperties.map(prop => {
@@ -79,7 +84,7 @@ propertiesRouter.get('/:slug', (req: Request, res: Response): void => {
   }
 });
 
-// PATCH /api/rooms/:id/availability - Update room bed availability (Admin protected)
+// PATCH /api/properties/rooms/:id/availability - Update room bed availability (Admin protected)
 propertiesRouter.patch('/rooms/:id/availability', adminAuth, validateBody(updateRoomAvailabilitySchema), (req: Request, res: Response): void => {
   try {
     const roomId = Number(req.params.id);

@@ -1,20 +1,18 @@
 import React, { useState } from 'react';
-import { 
-  Wifi, 
-  ShieldCheck, 
-  Sparkles, 
-  UtensilsCrossed, 
-  Zap, 
-  BookOpen, 
-  Bus, 
-  HeartPulse, 
-  Layers
+import {
+  Wifi,
+  ShieldCheck,
+  UtensilsCrossed,
+  Zap,
+  BookOpen,
+  Bus,
+  PhoneCall
 } from 'lucide-react';
-import { 
-  BentoVisualAcademic, 
-  BentoVisualSecurity, 
-  BentoVisualSmartLiving, 
-  BentoVisualWellness 
+import {
+  BentoVisualAcademic,
+  BentoVisualSecurity,
+  BentoVisualSmartLiving,
+  BentoVisualWellness
 } from './ArchitecturalArt';
 
 type CategoryFilter = 'All' | 'Academic' | 'Security' | 'Smart' | 'Wellness';
@@ -23,7 +21,6 @@ interface BentoItem {
   id: string;
   category: 'Academic' | 'Security' | 'Smart' | 'Wellness';
   title: string;
-  subtitle: string;
   description: string;
   icon: React.ReactNode;
   stat: string;
@@ -37,121 +34,114 @@ export const AmenitiesBento: React.FC = () => {
 
   const bentoItems: BentoItem[] = [
     {
-      id: 'wifi',
-      category: 'Academic',
-      title: '1 Gbps Redundant Mesh Wi-Fi',
-      subtitle: 'Low Latency Fibre Backbone',
-      description: 'Dual ISP feeds with seamless failover and dedicated CAT6 LAN ports at every workstation for research, coding, and submission sprints.',
-      icon: <Wifi className="w-5 h-5 text-sage" />,
-      stat: '0.2 ms',
-      statLabel: 'Gateway Jitter',
-      visual: <BentoVisualAcademic />,
-      colSpan: 'md:col-span-8'
+      id: 'agent-inspection',
+      category: 'Security',
+      title: 'In-Person Agent Verification & Owner Direct Line',
+      description: 'Every hostel and PG in Moodbidri is inspected by a local CampusNest agent. Even when an owner has no public phone number listed, our team schedules tours and confirms real bed openings.',
+      icon: <ShieldCheck className="w-5 h-5 text-terracotta" aria-hidden="true" />,
+      stat: '100%',
+      statLabel: 'Field Checked',
+      visual: <BentoVisualSecurity />,
+      colSpan: 'md:col-span-6'
     },
     {
-      id: 'security',
-      category: 'Security',
-      title: '24/7 Biometric Turnstiles & Wardens',
-      subtitle: 'Zero Unauthorized Access',
-      description: 'Facial recognition checkpoints, perimeter CCTV surveillance, and resident wardens ensure maximum guardian peace of mind.',
-      icon: <ShieldCheck className="w-5 h-5 text-terracotta" />,
-      stat: '100%',
-      statLabel: 'Logged Entry',
-      visual: <BentoVisualSecurity />,
-      colSpan: 'md:col-span-4'
+      id: 'wifi',
+      category: 'Academic',
+      title: 'High-Speed Fiber & Study Zones',
+      description: 'Verified broadband connectivity and quiet desk zones tailored for MITE engineering coursework, project sprints, and placement preparation.',
+      icon: <Wifi className="w-5 h-5 text-sage" aria-hidden="true" />,
+      stat: 'Fiber',
+      statLabel: 'Study Ready',
+      visual: <BentoVisualAcademic />,
+      colSpan: 'md:col-span-6'
     },
     {
       id: 'study',
       category: 'Academic',
-      title: 'Acoustic Sound-Dampened Study Booths',
-      subtitle: 'Zero Distraction Architecture',
-      description: 'Engineered with sound-absorbing felt panels and calibrated 4000K circadian LED lighting for intense exam prep and focused deep work.',
-      icon: <BookOpen className="w-5 h-5 text-obsidian" />,
-      stat: '28 dB',
-      statLabel: 'Ambient Noise Floor',
+      title: 'Exam-Friendly Quiet Environments',
+      description: 'Compare on-campus Badagumijaru hostels with calm residential PGs in Todaru and Hanumanth Nagar so you match your study rhythm.',
+      icon: <BookOpen className="w-5 h-5 text-obsidian" aria-hidden="true" />,
+      stat: '0.35 km',
+      statLabel: 'Closest Gate',
       colSpan: 'md:col-span-4'
     },
     {
       id: 'laundry-power',
       category: 'Smart',
-      title: 'App-Activated Laundry & 100% DG Backup',
-      subtitle: 'Frictionless Daily Routine',
-      description: 'Self-service washers & dryers bookable via phone with automatic SMS notifications. Heavy-duty diesel generators power full load including ACs.',
-      icon: <Zap className="w-5 h-5 text-terracotta" />,
-      stat: '0 sec',
-      statLabel: 'Power Switchover',
+      title: 'Power Backup & Laundry Infrastructure',
+      description: 'Monsoon-ready solar hot water, inverter/DG backup, and dedicated laundry drying spaces verified across partnered Moodbidri properties.',
+      icon: <Zap className="w-5 h-5 text-terracotta" aria-hidden="true" />,
+      stat: '24/7',
+      statLabel: 'Power & Water',
       visual: <BentoVisualSmartLiving />,
       colSpan: 'md:col-span-4'
     },
     {
       id: 'food',
       category: 'Wellness',
-      title: 'Chef-Crafted 4-Meal Mess & Nutrition',
-      subtitle: 'Regional Homestyle Cooking',
-      description: 'Rotating multi-cuisine menu (South Indian, North Indian, coastal delicacies) curated with organic grains, daily fresh salads, and evening milk/fruits.',
-      icon: <UtensilsCrossed className="w-5 h-5 text-sage" />,
-      stat: '4 Meals',
-      statLabel: 'Curated Daily',
+      title: 'Coastal & Pure-Vegetarian Mess Plans',
+      description: 'Choose between South Indian coastal menus, pure-vegetarian kitchens like Samrudhi Ladies PG, or flexible room-only lodge options.',
+      icon: <UtensilsCrossed className="w-5 h-5 text-sage" aria-hidden="true" />,
+      stat: 'Pure Veg',
+      statLabel: 'Options Listed',
       visual: <BentoVisualWellness />,
       colSpan: 'md:col-span-4'
     },
     {
-      id: 'wellness-health',
-      category: 'Wellness',
-      title: 'Doctor-On-Call & Mental Health Support',
-      subtitle: 'Empathetic Student Care',
-      description: 'Direct tie-ups with premier teaching hospitals (KMC, Father Muller, Yenepoya) with 24/7 emergency vehicle dispatch on campus.',
-      icon: <HeartPulse className="w-5 h-5 text-terracotta" />,
-      stat: '15 min',
-      statLabel: 'Medical Dispatch',
+      id: 'agent-callback',
+      category: 'Security',
+      title: 'Zero-Brokerage Parent & Student Coordination',
+      description: 'Request a 15-minute agent callback to verify security deposits, curfew timings, and guardian visitation policies before traveling to Moodbidri.',
+      icon: <PhoneCall className="w-5 h-5 text-terracotta" aria-hidden="true" />,
+      stat: '₹0',
+      statLabel: 'Student Fee',
       colSpan: 'md:col-span-6'
     },
     {
       id: 'transit',
       category: 'Smart',
-      title: 'Scheduled Campus Transit Shuttles',
-      subtitle: 'Zero-Commute Stress',
-      description: 'Morning and evening electric shuttles running directly between residence gates and MITE, NITK, MIT, and Electronic City tech campuses.',
-      icon: <Bus className="w-5 h-5 text-obsidian" />,
-      stat: 'Every 20m',
-      statLabel: 'Peak Frequency',
+      title: 'MITE Bus Route & Bike Commute Mapping',
+      description: 'Exact km distances and real travel times mapped along Todaru, Masthikate Road, and Moodbidri Bus Stand so daily commutes stay predictable.',
+      icon: <Bus className="w-5 h-5 text-obsidian" aria-hidden="true" />,
+      stat: '1–13m',
+      statLabel: 'MITE Travel',
       colSpan: 'md:col-span-6'
     }
   ];
 
-  const filteredItems = activeTab === 'All' 
-    ? bentoItems 
+  const filteredItems = activeTab === 'All'
+    ? bentoItems
     : bentoItems.filter(item => item.category === activeTab);
 
   return (
-    <section id="amenities" className="py-20 md:py-28 bg-alabaster">
+    <section id="amenities" className="py-16 md:py-24 bg-alabaster border-b border-parchment-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
-            <div className="inline-flex items-center gap-2 font-mono text-xs text-sage uppercase tracking-widest font-semibold mb-3">
-              <Layers className="w-4 h-4" />
-              <span>ALL-INCLUSIVE CO-LIVING INFRASTRUCTURE</span>
-            </div>
-            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-obsidian tracking-tight">
-              Built for High Performance & Peace of Mind.
+            <h2 className="font-display font-extrabold text-3xl sm:text-4xl text-obsidian tracking-tight mb-2">
+              Why Book Through CampusNest Agents
             </h2>
+            <p className="text-sm sm:text-base text-slate-700 max-w-xl">
+              Every listing in our Moodbidri directory is audited on the ground for commute accuracy, dining quality, and fair student agreements.
+            </p>
           </div>
 
-          {/* Interactive Category Filter Pills */}
-          <div className="flex flex-wrap gap-2 mt-6 md:mt-0 font-mono text-xs">
-            {(['All', 'Academic', 'Security', 'Smart', 'Wellness'] as CategoryFilter[]).map((tab) => (
+          {/* Category Filter Pills */}
+          <div className="flex flex-wrap gap-2 font-mono text-xs">
+            {(['All', 'Security', 'Academic', 'Smart', 'Wellness'] as CategoryFilter[]).map((tab) => (
               <button
                 key={tab}
+                type="button"
                 onClick={() => setActiveTab(tab)}
-                className={`px-4 py-2 rounded-lg transition-all ${
+                className={`px-4 py-2 rounded-lg border transition-colors ${
                   activeTab === tab
-                    ? 'bg-obsidian text-white shadow-sm font-semibold'
-                    : 'bg-white border border-parchment-200 text-slate-600 hover:text-obsidian hover:border-slate-400'
+                    ? 'bg-obsidian text-white border-obsidian font-semibold'
+                    : 'bg-white border-parchment-200 text-slate-700 hover:text-obsidian hover:border-obsidian'
                 }`}
               >
-                {tab === 'All' ? 'All Amenities' : tab}
+                {tab === 'All' ? 'All Pillars' : tab}
               </button>
             ))}
           </div>
@@ -162,34 +152,29 @@ export const AmenitiesBento: React.FC = () => {
           {filteredItems.map((item) => (
             <div
               key={item.id}
-              className={`flex flex-col justify-between rounded-2xl bg-white border border-parchment-200 p-6 sm:p-8 shadow-architectural hover:shadow-architectural-hover transition-all duration-300 ${
+              className={`flex flex-col justify-between rounded-2xl bg-white border border-parchment-200 p-6 sm:p-7 shadow-architectural hover:shadow-architectural-hover transition-shadow duration-200 ${
                 item.colSpan || 'md:col-span-4'
               }`}
             >
               <div>
-                {/* Header row: Icon + Stat badge */}
                 <div className="flex items-center justify-between mb-4">
                   <div className="w-10 h-10 rounded-xl bg-alabaster border border-parchment-200 flex items-center justify-center">
                     {item.icon}
                   </div>
-                  <div className="text-right font-mono">
+                  <div className="text-right font-mono tabular-nums">
                     <span className="font-bold text-sm text-obsidian">{item.stat}</span>
-                    <span className="text-[10px] text-slate-500 block uppercase">{item.statLabel}</span>
+                    <span className="text-[11px] text-slate-600 block uppercase">{item.statLabel}</span>
                   </div>
                 </div>
 
-                <div className="font-mono text-[11px] text-terracotta uppercase tracking-wider font-semibold mb-1">
-                  {item.subtitle}
-                </div>
                 <h3 className="font-display font-bold text-xl text-obsidian mb-2">
                   {item.title}
                 </h3>
-                <p className="text-sm text-slate-600 leading-relaxed mb-6">
+                <p className="text-sm text-slate-700 leading-relaxed mb-4">
                   {item.description}
                 </p>
               </div>
 
-              {/* Optional Custom SVG Graphic */}
               {item.visual && (
                 <div className="mt-4 pt-4 border-t border-parchment-200 overflow-hidden">
                   {item.visual}

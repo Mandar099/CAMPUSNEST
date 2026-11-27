@@ -12,14 +12,13 @@ export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<'home' | 'admin'>('home');
   const [properties, setProperties] = useState<Property[]>([]);
   const [events, setEvents] = useState<CommunityEvent[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   // Booking Drawer State
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [bookingPropertyId, setBookingPropertyId] = useState<number | undefined>(undefined);
   const [bookingRoomId, setBookingRoomId] = useState<number | undefined>(undefined);
+  const [bookingMode, setBookingMode] = useState<'booking' | 'callback'>('booking');
 
-  // Total Available Beds calculated live across properties
   const totalAvailableBeds = properties.reduce((acc, p) => acc + p.available_beds, 0);
 
   const loadData = useCallback(async () => {
@@ -32,15 +31,12 @@ export const App: React.FC = () => {
       setEvents(eventsData);
     } catch (err) {
       console.error('[CampusNest] Failed to load initial data:', err);
-    } finally {
-      setIsLoading(false);
     }
   }, []);
 
   useEffect(() => {
     loadData();
 
-    // Check URL route for /admin or #admin
     const checkRoute = () => {
       if (window.location.pathname === '/admin' || window.location.hash === '#admin') {
         setCurrentView('admin');
@@ -53,8 +49,7 @@ export const App: React.FC = () => {
     window.addEventListener('popstate', checkRoute);
     window.addEventListener('hashchange', checkRoute);
 
-    // Initialize smooth scrolling
-    const lenis = initSmoothScroll();
+    initSmoothScroll();
 
     return () => {
       window.removeEventListener('popstate', checkRoute);
@@ -73,27 +68,29 @@ export const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const handleOpenBooking = (propId?: number, roomId?: number) => {
+  const handleOpenBooking = (
+    propId?: number,
+    roomId?: number,
+    mode: 'booking' | 'callback' = 'booking'
+  ) => {
     setBookingPropertyId(propId);
     setBookingRoomId(roomId);
+    setBookingMode(mode);
     setIsBookingOpen(true);
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-alabaster text-obsidian font-sans">
-      
-      {/* 1. Entrance Preloader */}
       <Preloader />
 
-      {/* 2. Sticky Glassmorphic Header */}
       <Navbar
         totalAvailableBeds={totalAvailableBeds}
-        onOpenBooking={() => handleOpenBooking()}
+        totalProperties={properties.length || 11}
+        onOpenBooking={(propId, roomId) => handleOpenBooking(propId, roomId, 'booking')}
         currentView={currentView}
         onNavigate={handleNavigate}
       />
 
-      {/* 3. Main Views */}
       {currentView === 'home' ? (
         <Home
           properties={properties}
@@ -107,18 +104,17 @@ export const App: React.FC = () => {
         />
       )}
 
-      {/* 4. Multi-Step Slide-Over Booking Drawer */}
       <BookingDrawer
         isOpen={isBookingOpen}
         onClose={() => setIsBookingOpen(false)}
         properties={properties}
         initialPropertyId={bookingPropertyId}
         initialRoomId={bookingRoomId}
+        initialMode={bookingMode}
         onBookingSuccess={() => {
           loadData();
         }}
       />
-
     </div>
   );
 };

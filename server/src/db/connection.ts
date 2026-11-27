@@ -34,6 +34,26 @@ db.exec('PRAGMA busy_timeout = 5000;');
 db.exec('PRAGMA synchronous = NORMAL;');
 
 export function initDatabase() {
+  // Check if existing DB uses legacy prototype schema (without distance_km or New Lead status)
+  const tableInfo = db.prepare("PRAGMA table_info('properties')").all() as Array<{ name: string }>;
+  if (tableInfo.length > 0) {
+    const hasNewCols = tableInfo.some((col) => col.name === 'distance_km') &&
+                       tableInfo.some((col) => col.name === 'category') &&
+                       tableInfo.some((col) => col.name === 'address');
+
+    const bookingsSqlRow = db.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='bookings'").get() as { sql?: string } | undefined;
+    const hasAgentStatuses = bookingsSqlRow?.sql?.includes('New Lead') ?? false;
+
+    if (!hasNewCols || !hasAgentStatuses) {
+      db.exec('PRAGMA foreign_keys = OFF;');
+      db.exec('DROP TABLE IF EXISTS bookings;');
+      db.exec('DROP TABLE IF EXISTS room_types;');
+      db.exec('DROP TABLE IF EXISTS properties;');
+      db.exec('DROP TABLE IF EXISTS events;');
+      db.exec('PRAGMA foreign_keys = ON;');
+    }
+  }
+
   const schemaPath = path.join(__dirname, 'schema.sql');
   const schemaSql = fs.readFileSync(schemaPath, 'utf-8');
   db.exec(schemaSql);

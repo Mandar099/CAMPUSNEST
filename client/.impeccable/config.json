@@ -1,0 +1,26 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "inter",
+        "createdAt": "2026-11-27T16:09:00.820Z",
+        "reason": "user confirmed in original master spec and docs/DESIGN_SYSTEM.md"
+      },
+      {
+        "rule": "overused-font",
+        "value": "plus jakarta sans",
+        "createdAt": "2026-11-27T16:09:00.907Z",
+        "reason": "user confirmed in original master spec and docs/DESIGN_SYSTEM.md"
+      },
+      {
+        "rule": "overused-font",
+        "value": "space grotesk",
+        "createdAt": "2026-11-27T16:09:00.994Z",
+        "reason": "user confirmed in original master spec and docs/DESIGN_SYSTEM.md"
+      }
+    ]
+  }
+}

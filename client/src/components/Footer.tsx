@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { subscribeNewsletter } from '../lib/api';
-import { 
-  ChevronDown, 
-  Send, 
-  Check, 
-  MapPin, 
-  Phone, 
-  Mail, 
-  ShieldCheck, 
-  HelpCircle 
+import {
+  ChevronDown,
+  Send,
+  Check,
+  MapPin,
+  Phone,
+  Mail,
+  ShieldCheck
 } from 'lucide-react';
 
 export const Footer: React.FC = () => {
@@ -19,24 +18,24 @@ export const Footer: React.FC = () => {
 
   const faqs = [
     {
-      q: "What does 'All-Inclusive' rent really cover?",
-      a: "Everything is bundled into one transparent monthly INR rate: fully-furnished private or twin studio pod, 4-meal daily chef-crafted mess (breakfast, lunch, evening tea/snacks, dinner), high-speed 1 Gbps redundant fiber Wi-Fi, 100% generator power backup (including ACs), weekly housekeeping, and automated app-driven laundry."
+      q: 'How does CampusNest act as my Moodbidri PG & Hostel Agent?',
+      a: 'CampusNest coordinates directly between MITE students/parents and Moodbidri PG owners. We inspect properties in person, verify real room availability, negotiate fair deposits, and schedule safe on-site or virtual walkthroughs at ₹0 brokerage fee to students.'
     },
     {
-      q: "Can parents and guardians inspect the residence before admissions?",
-      a: "Absolutely. We encourage parents to schedule an on-site physical tour or a 360° virtual video walkthrough with our residential manager. We show room furnishings, dining mess hygiene, water filtration plants, and biometric access logs."
+      q: 'Why do some PGs say "Contact via CampusNest Agent" instead of a phone number?',
+      a: 'Listings like Masthikatte Boy’s Hostel, Samrudhi ladies pg (pure veg), and Veena PG (Paying Guest) do not publish direct public telephone lines or rely on on-site caretakers. Clicking "Book via Agent" or "Request Agent Callback" dispatches our Moodbidri agent to verify beds on-site and call you back.'
     },
     {
-      q: "How does the security and curfew policy work?",
-      a: "All CampusNest residences operate 24/7 biometric turnstiles, round-the-clock security personnel, and resident wardens. Movement logs are electronically tracked and accessible to registered guardians through SMS alerts upon request."
+      q: 'How accurate are the distances and travel times from MITE?',
+      a: 'Every distance (from 0.35 km for MITE On-Campus Hostels in Badagumijaru to 1.4 km in Todaru and 3.7–5.3 km in Moodbidri town) is measured directly along the MITE road corridor.'
     },
     {
-      q: "What is the security deposit and refund timeline?",
-      a: "Security deposits are strictly 100% refundable upon academic year completion. Following a room checkout inspection, deposits are credited directly to your bank account within 7 business days without arbitrary deductions."
+      q: 'Can parents schedule an on-site circuit of multiple PGs in one day?',
+      a: 'Yes. Submit a booking request with your preferred arrival date and list the PGs you want to compare in the notes field—our local coordinator will organize a single guided visit loop.'
     },
     {
-      q: "Do you accommodate dietary preferences (Pure Vegetarian vs Non-Veg)?",
-      a: "Yes. Our kitchens feature distinct, dedicated vegetarian preparation counters and separate cookware, alongside nutritious coastal and regional South/North Indian meal options."
+      q: 'Are pure vegetarian ladies PG options available?',
+      a: 'Yes, including Samrudhi ladies pg (pure veg) on Ponnechari Road and Shama ladies PG near Ballal Hotel, alongside MITE Girl’s Hostel inside campus.'
     }
   ];
 
@@ -59,16 +58,12 @@ export const Footer: React.FC = () => {
   return (
     <footer className="bg-obsidian text-alabaster pt-20 pb-12 border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* SECTION 1: FAQ ACCORDION */}
-        <div className="max-w-3xl mx-auto mb-20">
+
+        {/* FAQ ACCORDION */}
+        <div className="max-w-3xl mx-auto mb-16">
           <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 font-mono text-xs text-terracotta uppercase tracking-widest font-semibold mb-2">
-              <HelpCircle className="w-4 h-4" />
-              <span>FREQUENTLY ASKED QUESTIONS</span>
-            </div>
             <h2 className="font-display font-extrabold text-2xl sm:text-3xl text-white tracking-tight">
-              Transparent Answers for Students & Guardians.
+              Questions About MITE &amp; Moodbidri Stays
             </h2>
           </div>
 
@@ -76,22 +71,25 @@ export const Footer: React.FC = () => {
             {faqs.map((faq, idx) => (
               <div
                 key={idx}
-                className="rounded-xl border border-slate-800 bg-slate-900/60 overflow-hidden transition-all"
+                className="rounded-xl border border-slate-800 bg-slate-900/70 overflow-hidden"
               >
                 <button
+                  type="button"
+                  aria-expanded={openFaq === idx}
                   onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
                   className="w-full p-5 text-left flex items-center justify-between gap-4 font-display font-semibold text-sm sm:text-base text-white hover:text-terracotta transition-colors"
                 >
                   <span>{faq.q}</span>
                   <ChevronDown
-                    className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 text-slate-400 ${
+                    aria-hidden="true"
+                    className={`w-4 h-4 flex-shrink-0 transition-transform duration-200 text-parchment-200 ${
                       openFaq === idx ? 'rotate-180 text-terracotta' : ''
                     }`}
                   />
                 </button>
 
                 {openFaq === idx && (
-                  <div className="px-5 pb-5 pt-1 text-xs sm:text-sm text-slate-400 font-sans leading-relaxed border-t border-slate-800/60">
+                  <div className="px-5 pb-5 pt-2 text-xs sm:text-sm text-parchment-200 font-sans leading-relaxed border-t border-slate-800">
                     {faq.a}
                   </div>
                 )}
@@ -100,50 +98,51 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* SECTION 2: NEWSLETTER SUBSCRIPTION BAR */}
-        <div className="rounded-2xl bg-gradient-to-r from-slate-900 to-obsidian border border-slate-800 p-8 sm:p-10 mb-20">
+        {/* NEWSLETTER SUBSCRIPTION BAR */}
+        <div className="rounded-2xl bg-slate-900 border border-slate-800 p-8 sm:p-10 mb-16">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7">
-              <span className="font-mono text-xs text-sage uppercase font-semibold block mb-1">
-                ADMISSION CYCLE ALERTS // 2026-2027
-              </span>
               <h3 className="font-display font-bold text-2xl sm:text-3xl text-white mb-2">
-                Stay Ahead of Bed Allocation Deadlines.
+                Get Bed Vacancy Alerts Around MITE.
               </h3>
-              <p className="text-xs sm:text-sm text-slate-400">
-                Receive instant priority alerts when scholarship rooms, solo pods, and campus transit slots open in Moodbidri, Mangaluru, Manipal, and Bengaluru.
+              <p className="text-xs sm:text-sm text-parchment-200">
+                Receive priority alerts from our Moodbidri field agents whenever single rooms or twin sharing seats open up for the 2026 academic intake.
               </p>
             </div>
 
             <div className="lg:col-span-5">
               <form onSubmit={handleSubscribe} className="space-y-2">
-                <div className="flex rounded-xl overflow-hidden border border-slate-700 bg-slate-800/80 focus-within:border-terracotta transition-colors">
+                <label htmlFor="newsletter-email" className="sr-only">Email address for bed alerts</label>
+                <div className="flex rounded-xl overflow-hidden border border-slate-700 bg-slate-800 focus-within:border-terracotta transition-colors">
                   <input
+                    id="newsletter-email"
+                    name="email"
                     type="email"
+                    autoComplete="email"
                     required
-                    placeholder="Enter your student or guardian email..."
+                    placeholder="Enter student or guardian email…"
                     value={newsletterEmail}
                     onChange={(e) => setNewsletterEmail(e.target.value)}
-                    className="w-full px-4 py-3 bg-transparent text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none"
+                    className="w-full px-4 py-3 bg-transparent text-xs sm:text-sm text-white placeholder:text-slate-300"
                   />
                   <button
                     type="submit"
                     disabled={subscribeStatus === 'loading'}
                     className="px-5 bg-terracotta hover:bg-terracotta-600 text-white font-mono text-xs uppercase font-semibold flex items-center gap-1.5 transition-colors disabled:opacity-50"
                   >
-                    <span>{subscribeStatus === 'loading' ? 'Saving' : 'Join'}</span>
-                    <Send className="w-3.5 h-3.5" />
+                    <span>{subscribeStatus === 'loading' ? 'Saving…' : 'Join'}</span>
+                    <Send className="w-3.5 h-3.5" aria-hidden="true" />
                   </button>
                 </div>
 
                 {subscribeStatus === 'success' && (
-                  <p className="text-xs text-sage font-mono flex items-center gap-1">
-                    <Check className="w-3.5 h-3.5" />
+                  <p role="status" aria-live="polite" className="text-xs text-sage-100 font-mono flex items-center gap-1">
+                    <Check className="w-3.5 h-3.5" aria-hidden="true" />
                     <span>{subscribeMessage}</span>
                   </p>
                 )}
                 {subscribeStatus === 'error' && (
-                  <p className="text-xs text-red-400 font-mono">
+                  <p role="alert" aria-live="polite" className="text-xs text-red-300 font-mono">
                     {subscribeMessage}
                   </p>
                 )}
@@ -152,87 +151,82 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* SECTION 3: CAMPUS DIRECTORY & COLOPHON */}
+        {/* MOODBIDRI DIRECTORY & COLOPHON */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-12 border-b border-slate-800 font-mono text-xs">
-          
-          {/* Brand Col */}
           <div>
             <div className="flex items-center gap-2 mb-3">
               <div className="w-7 h-7 rounded bg-terracotta flex items-center justify-center text-white font-bold">
                 CN
               </div>
-              <span className="font-display font-extrabold text-lg text-white">
+              <span className="font-display font-extrabold text-lg text-white" translate="no">
                 CAMPUS<span className="text-terracotta">NEST</span>
               </span>
             </div>
-            <p className="text-slate-400 text-xs font-sans leading-relaxed mb-4">
-              Design-led student residences built for focus, security, and collegiate community across South India.
+            <p className="text-parchment-200 text-xs font-sans leading-relaxed mb-4">
+              Verified student-housing intermediary serving MITE students and parents across Badagumijaru, Todaru, and Moodbidri town.
             </p>
-            <div className="flex items-center gap-2 text-sage">
-              <ShieldCheck className="w-4 h-4" />
-              <span>100% Verified Campus Properties</span>
+            <div className="flex items-center gap-2 text-sage-100">
+              <ShieldCheck className="w-4 h-4" aria-hidden="true" />
+              <span>11 Verified Moodbidri Properties</span>
             </div>
           </div>
 
-          {/* Hub Directory 1: Moodbidri & Mangaluru */}
           <div>
-            <h4 className="text-white font-semibold uppercase tracking-wider mb-3">Coastal Karnataka Hubs</h4>
-            <div className="space-y-3 text-slate-400">
+            <h4 className="text-white font-semibold uppercase tracking-wider mb-3">Badagumijaru &amp; Todaru</h4>
+            <div className="space-y-2.5 text-parchment-200">
               <div>
-                <strong className="text-slate-200 block">CampusNest Parkside</strong>
-                <span>400m from MITE West Gate, Moodbidri — 574225</span>
+                <strong className="text-white block">MITE Boy&apos;s &amp; Girl&apos;s Hostels</strong>
+                <span>0.35 km · Badagumijaru Campus</span>
               </div>
               <div>
-                <strong className="text-slate-200 block">CampusNest Harbor View</strong>
-                <span>850m from NITK Surathkal, Srinivas Corridor, Mangaluru</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Hub Directory 2: Manipal & Bengaluru */}
-          <div>
-            <h4 className="text-white font-semibold uppercase tracking-wider mb-3">University & Tech Hubs</h4>
-            <div className="space-y-3 text-slate-400">
-              <div>
-                <strong className="text-slate-200 block">CampusNest Scholar's Loft</strong>
-                <span>Eshwar Nagar (600m from MIT & KMC), Manipal — 576104</span>
-              </div>
-              <div>
-                <strong className="text-slate-200 block">CampusNest Innovation Hub</strong>
-                <span>Electronic City Ph 1 (Near PES / IIIT-B), Bengaluru — 560100</span>
+                <strong className="text-white block">DAYA PG (FOR BOYS)</strong>
+                <span>1.4 km · Todaru, Karnataka 574225</span>
               </div>
             </div>
           </div>
 
-          {/* Direct Support Contact */}
           <div>
-            <h4 className="text-white font-semibold uppercase tracking-wider mb-3">Central Admissions Desk</h4>
-            <div className="space-y-2 text-slate-400">
+            <h4 className="text-white font-semibold uppercase tracking-wider mb-3">Moodbidri Town Zones</h4>
+            <div className="space-y-2.5 text-parchment-200">
+              <div>
+                <strong className="text-white block">Masthikate &amp; Rathnakaravarni Nagara</strong>
+                <span>Shama, New Royal, Masthikatte (3.7–3.9 km)</span>
+              </div>
+              <div>
+                <strong className="text-white block">Bus Stand, Ponnechari &amp; Hanumanth Nagar</strong>
+                <span>R.B Lodge, Shalimar, Shri Brahmi, Samrudhi, Veena</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="text-white font-semibold uppercase tracking-wider mb-3">Moodbidri Agent Desk</h4>
+            <div className="space-y-2 text-parchment-200">
               <div className="flex items-center gap-2">
-                <Phone className="w-3.5 h-3.5 text-terracotta" />
-                <span>+91 8258 290123 / 98451 00226</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Mail className="w-3.5 h-3.5 text-terracotta" />
-                <span>admissions@campusnest.in</span>
+                <Phone className="w-3.5 h-3.5 text-terracotta" aria-hidden="true" />
+                <a href="tel:08258262695" className="hover:text-white underline-offset-4 hover:underline tabular-nums">
+                  082582 62695 (MITE Campus Line)
+                </a>
               </div>
               <div className="flex items-center gap-2">
-                <MapPin className="w-3.5 h-3.5 text-terracotta" />
-                <span>Mon – Sun: 08:00 AM – 09:00 PM IST</span>
+                <Mail className="w-3.5 h-3.5 text-terracotta" aria-hidden="true" />
+                <span>agents@campusnest.in</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <MapPin className="w-3.5 h-3.5 text-terracotta" aria-hidden="true" />
+                <span>Moodbidri, Karnataka 574225 / 574227</span>
               </div>
             </div>
           </div>
-
         </div>
 
-        {/* SECTION 4: COPYRIGHT & METADATA */}
-        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono text-slate-500 gap-4">
+        {/* COPYRIGHT */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-parchment-200 gap-4">
           <div>
-            © 2026 CampusNest Living Technologies Pvt. Ltd. All rights reserved.
+            © 2026 CampusNest Student Housing Intermediary.
           </div>
           <div className="flex items-center gap-6">
-            <span>MITE · NITK · MANIPAL · PES · IIIT-B</span>
-            <span className="text-terracotta">100% All-Inclusive INR</span>
+            <span>MITE · BADAGUMIJARU · TODARU · MOODBIDRI</span>
           </div>
         </div>
 
