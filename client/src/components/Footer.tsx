@@ -120,7 +120,7 @@ export const Footer: React.FC = () => {
                     type="email"
                     autoComplete="email"
                     required
-                    placeholder="Enter student or guardian email…"
+                    placeholder="Student or guardian email…"
                     value={newsletterEmail}
                     onChange={(e) => setNewsletterEmail(e.target.value)}
                     className="w-full px-4 py-3 bg-transparent text-xs sm:text-sm text-white placeholder:text-slate-300"

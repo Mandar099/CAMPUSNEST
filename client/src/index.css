@@ -119,3 +119,84 @@
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
+
+/* Clean 1-Page Print Stylesheet for Booking Pass & Directory Summary */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm;
+  }
+
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+    color: #141517 !important;
+  }
+
+  * {
+    animation: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Hide decorative chrome, nav, preloader, floating compare bar, and inputs */
+  header,
+  nav,
+  [role="region"][aria-label="PG comparison selection tray"],
+  [aria-label="Loading CampusNest Moodbidri"] {
+    display: none !important;
+  }
+
+  /* When Official Booking Pass is active, isolate #booking-pass-card on Page 1 */
+  body:has(#booking-pass-card) main,
+  body:has(#booking-pass-card) footer {
+    display: none !important;
+  }
+
+  body:has(#booking-pass-card) [role="dialog"] {
+    position: static !important;
+    background: #ffffff !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    display: block !important;
+  }
+
+  body:has(#booking-pass-card) [role="dialog"] > div {
+    max-width: 100% !important;
+    height: auto !important;
+    border: none !important;
+    overflow: visible !important;
+  }
+
+  body:has(#booking-pass-card) [role="dialog"] button,
+  body:has(#booking-pass-card) [role="dialog"] a {
+    display: none !important;
+  }
+
+  #booking-pass-card {
+    break-inside: avoid;
+    border: 2px solid #141517 !important;
+    padding: 18px !important;
+    margin: 0 !important;
+  }
+
+  /* When printing directory page directly, compact sections to prevent multi-page sprawl */
+  section {
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
+    break-inside: avoid-page;
+  }
+
+  button,
+  select,
+  input[type="search"],
+  input[type="range"] {
+    display: none !important;
+  }
+
+  footer form {
+    display: none !important;
+  }
+}

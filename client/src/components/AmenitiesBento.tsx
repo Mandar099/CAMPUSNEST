@@ -25,9 +25,34 @@ interface BentoItem {
   icon: React.ReactNode;
   stat: string;
   statLabel: string;
+  imageUrl?: string;
+  imageAlt?: string;
   visual?: React.ReactNode;
   colSpan?: string;
 }
+
+const AmenityPhotoWithFallback: React.FC<{
+  src?: string;
+  alt?: string;
+  fallback?: React.ReactNode;
+}> = ({ src, alt, fallback }) => {
+  const [failed, setFailed] = useState(false);
+
+  if (src && !failed) {
+    return (
+      <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden border border-parchment-200 bg-alabaster">
+        <img
+          src={src}
+          alt={alt || 'CampusNest Moodbidri amenity view'}
+          onError={() => setFailed(true)}
+          className="w-full h-full object-cover sepia-[0.06] contrast-[1.02]"
+        />
+      </div>
+    );
+  }
+
+  return <>{fallback}</>;
+};
 
 export const AmenitiesBento: React.FC = () => {
   const [activeTab, setActiveTab] = useState<CategoryFilter>('All');
@@ -41,6 +66,8 @@ export const AmenitiesBento: React.FC = () => {
       icon: <ShieldCheck className="w-5 h-5 text-terracotta" aria-hidden="true" />,
       stat: '100%',
       statLabel: 'Field Checked',
+      imageUrl: '/images/amenity-security-laundry.jpg',
+      imageAlt: 'Supervised residence reception lounge and verified check-in area',
       visual: <BentoVisualSecurity />,
       colSpan: 'md:col-span-6'
     },
@@ -52,6 +79,8 @@ export const AmenitiesBento: React.FC = () => {
       icon: <Wifi className="w-5 h-5 text-sage" aria-hidden="true" />,
       stat: 'Fiber',
       statLabel: 'Study Ready',
+      imageUrl: '/images/amenity-wifi-study.jpg',
+      imageAlt: 'Sunlit high-speed fiber study room with warm wooden desks',
       visual: <BentoVisualAcademic />,
       colSpan: 'md:col-span-6'
     },
@@ -63,6 +92,9 @@ export const AmenitiesBento: React.FC = () => {
       icon: <BookOpen className="w-5 h-5 text-obsidian" aria-hidden="true" />,
       stat: '0.35 km',
       statLabel: 'Closest Gate',
+      imageUrl: '/images/amenity-bedroom.jpg',
+      imageAlt: 'Sunlit student bedroom with wooden study table and natural light',
+      visual: <BentoVisualAcademic />,
       colSpan: 'md:col-span-4'
     },
     {
@@ -84,6 +116,8 @@ export const AmenitiesBento: React.FC = () => {
       icon: <UtensilsCrossed className="w-5 h-5 text-sage" aria-hidden="true" />,
       stat: 'Pure Veg',
       statLabel: 'Options Listed',
+      imageUrl: '/images/amenity-mess-dining.jpg',
+      imageAlt: 'Bright warm-wood student dining hall and mess seating area',
       visual: <BentoVisualWellness />,
       colSpan: 'md:col-span-4'
     },
@@ -175,9 +209,13 @@ export const AmenitiesBento: React.FC = () => {
                 </p>
               </div>
 
-              {item.visual && (
+              {(item.imageUrl || item.visual) && (
                 <div className="mt-4 pt-4 border-t border-parchment-200 overflow-hidden">
-                  {item.visual}
+                  <AmenityPhotoWithFallback
+                    src={item.imageUrl}
+                    alt={item.imageAlt}
+                    fallback={item.visual}
+                  />
                 </div>
               )}
             </div>

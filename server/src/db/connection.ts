@@ -39,7 +39,8 @@ export function initDatabase() {
   if (tableInfo.length > 0) {
     const hasNewCols = tableInfo.some((col) => col.name === 'distance_km') &&
                        tableInfo.some((col) => col.name === 'category') &&
-                       tableInfo.some((col) => col.name === 'address');
+                       tableInfo.some((col) => col.name === 'image_url') &&
+                       tableInfo.some((col) => col.name === 'food_plan');
 
     const bookingsSqlRow = db.prepare("SELECT sql FROM sqlite_master WHERE type='table' AND name='bookings'").get() as { sql?: string } | undefined;
     const hasAgentStatuses = bookingsSqlRow?.sql?.includes('New Lead') ?? false;

@@ -10,6 +10,11 @@ interface RealPropertySeed {
   travel_time: string;
   address: string;
   phone: string | null;
+  image_url: string;
+  food_plan: string;
+  curfew_timing: string;
+  wifi_speed: string;
+  power_backup: string;
   tagline: string;
   description: string;
   accent_theme: 'emerald' | 'ocean' | 'terracotta' | 'obsidian';
@@ -26,7 +31,7 @@ interface RealPropertySeed {
   }>;
 }
 
-const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
+export const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
   {
     slug: 'mite-boys-hostel',
     name: "MITE Boy's Hostel",
@@ -37,29 +42,43 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     travel_time: '1 min',
     address: '3X27+RVF, Badagumijaru, Karnataka 574225',
     phone: '082582 62695',
+    image_url: '/images/mite-boys-hostel.jpg',
+    food_plan: '4-Meal Campus Mess Included',
+    curfew_timing: '9:30 PM Campus Gate',
+    wifi_speed: '100 Mbps Campus Fiber',
+    power_backup: '24/7 Campus DG Backup',
     tagline: 'Inside MITE Academic Grounds — 1 Min Walk to Classrooms',
     description:
-      'Official on-campus boys residence inside Badagumijaru campus with round-the-clock warden supervision, high-speed campus fiber, and mess dining hall.',
+      'Official on-campus boys residence inside Badagumijaru campus with round-the-clock warden supervision, high-speed campus fiber, and dining hall.',
     accent_theme: 'emerald',
     amenities: ['Campus Fiber Wi-Fi', 'On-Campus Mess', '24/7 Security Gate', 'Generator Backup', 'Reading Hall'],
     highlights: ['350m walk to MITE main block', 'Warden-supervised discipline', 'Zero commute time'],
     rooms: [
       {
-        name: 'Twin Sharing Academic Room',
+        name: 'Single Study Room',
+        area_sqft: 155,
+        monthly_rent_inr: 8200,
+        deposit_inr: 15000,
+        available_count: 2,
+        features: ['Single Cot & Study Desk', 'Private Locker', 'Campus Fiber Wi-Fi', '4-Meal Mess Included'],
+        floorplan_variant: 'solo_studio'
+      },
+      {
+        name: 'Twin Sharing Room',
         area_sqft: 210,
         monthly_rent_inr: 6800,
         deposit_inr: 15000,
         available_count: 6,
-        features: ['Study Desks & Chairs', 'Attached Bath', 'Campus Wi-Fi', '4-Meal Mess Included'],
+        features: ['2 Study Desks & Chairs', 'Attached Bath', 'Campus Wi-Fi', '4-Meal Mess Included'],
         floorplan_variant: 'twin_pod'
       },
       {
-        name: 'Triple Engineering Pod',
+        name: 'Triple Sharing Room',
         area_sqft: 260,
         monthly_rent_inr: 5600,
         deposit_inr: 12000,
         available_count: 8,
-        features: ['3 Study Stations', 'Individual Lockers', 'Common Balcony', 'Mess Included'],
+        features: ['3 Study Stations', 'Individual Lockers', 'Common Balcony', '4-Meal Mess Included'],
         floorplan_variant: 'triple_loft'
       }
     ]
@@ -74,6 +93,11 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     travel_time: '2 mins',
     address: '3X28+X5F, Badagumijaru, Karnataka 574225',
     phone: '082582 62695',
+    image_url: '/images/mite-girls-hostel.jpg',
+    food_plan: '4-Meal Campus Mess Included',
+    curfew_timing: '7:30 PM Lady Warden Gate',
+    wifi_speed: '100 Mbps Campus Fiber',
+    power_backup: '24/7 DG & Solar Backup',
     tagline: 'Secure On-Campus Girls Residence with 24/7 Warden & Medical Support',
     description:
       'Protected on-campus girls hostel within MITE Badagumijaru premises featuring biometric entry, dedicated lady wardens, study lounges, and full dining facility.',
@@ -82,16 +106,25 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     highlights: ['2 min walk inside MITE campus', 'CCTV monitored perimeter', 'Parent visitor lounge'],
     rooms: [
       {
-        name: 'Twin En-Suite Room',
+        name: 'Single En-Suite Room',
+        area_sqft: 160,
+        monthly_rent_inr: 8500,
+        deposit_inr: 16000,
+        available_count: 2,
+        features: ['Private Room', 'Study Desk & Wardrobe', '24/7 Solar Hot Water', '4-Meal Mess Included'],
+        floorplan_variant: 'solo_studio'
+      },
+      {
+        name: 'Twin Sharing Room',
         area_sqft: 215,
         monthly_rent_inr: 7000,
         deposit_inr: 15000,
         available_count: 5,
-        features: ['Attached Washroom', 'Ergonomic Study Tables', '24/7 Solar Hot Water', 'Mess Included'],
+        features: ['Attached Washroom', 'Ergonomic Study Tables', '24/7 Solar Hot Water', '4-Meal Mess Included'],
         floorplan_variant: 'twin_pod'
       },
       {
-        name: 'Triple Comfort Suite',
+        name: 'Triple Sharing Room',
         area_sqft: 270,
         monthly_rent_inr: 5800,
         deposit_inr: 12000,
@@ -111,6 +144,11 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     travel_time: '3 mins',
     address: 'Todaru, Karnataka 574225',
     phone: '099013 25685',
+    image_url: '/images/daya-pg-boys.jpg',
+    food_plan: '3-Time Homestyle Meals',
+    curfew_timing: '10:30 PM Flexible',
+    wifi_speed: '150 Mbps Dual Fiber',
+    power_backup: '24/7 Inverter Backup',
     tagline: 'Nearest Off-Campus Boys PG in Todaru — 3 Mins from MITE',
     description:
       'Popular off-campus boys PG located in peaceful Todaru just 1.4 km from MITE gates. Combines home-style coastal meals with flexible hostel freedom.',
@@ -119,7 +157,7 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     highlights: ['Closest private boys PG to MITE (1.4 km)', '3 min ride on NH-169', 'Quiet study atmosphere'],
     rooms: [
       {
-        name: 'Single Private Room',
+        name: 'Single Room',
         area_sqft: 165,
         monthly_rent_inr: 8200,
         deposit_inr: 15000,
@@ -128,13 +166,22 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
         floorplan_variant: 'solo_studio'
       },
       {
-        name: 'Twin Sharing Boys Room',
+        name: 'Twin Sharing Room',
         area_sqft: 220,
         monthly_rent_inr: 6200,
         deposit_inr: 10000,
         available_count: 5,
         features: ['2 Single Cots', 'Study Table', 'Cupboard Storage', '3 Meals Daily'],
         floorplan_variant: 'twin_pod'
+      },
+      {
+        name: 'Triple Sharing Room',
+        area_sqft: 265,
+        monthly_rent_inr: 5200,
+        deposit_inr: 9000,
+        available_count: 4,
+        features: ['3 Single Cots', 'Shared Balcony', 'Cupboards', '3 Meals Daily'],
+        floorplan_variant: 'triple_loft'
       }
     ]
   },
@@ -148,6 +195,11 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     travel_time: '8 mins',
     address: 'Near Ballal Hotel, Rathnakaravarni Nagara, Moodbidri, Karnataka 574227',
     phone: '094489 09575',
+    image_url: '/images/shama-ladies-pg.jpg',
+    food_plan: 'Veg & Non-Veg Home Mess',
+    curfew_timing: '8:30 PM Gated Entry',
+    wifi_speed: '100 Mbps Fiber',
+    power_backup: '24/7 Inverter Backup',
     tagline: 'Trusted Ladies PG in Rathnakaravarni Nagara with Home-Cooked Food',
     description:
       'Well-maintained ladies accommodation near Ballal Hotel in central Moodbidri, offering safe gated access, easy bus-route connectivity to MITE, and fresh meals.',
@@ -156,7 +208,16 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     highlights: ['Near Ballal Hotel landmark', 'Frequent college buses to MITE', 'Lady caretaker on site'],
     rooms: [
       {
-        name: 'Twin Sharing Ladies Room',
+        name: 'Single Room',
+        area_sqft: 160,
+        monthly_rent_inr: 7900,
+        deposit_inr: 12000,
+        available_count: 2,
+        features: ['Single Cot', 'Study Desk', 'Wardrobe', 'Home Food Included'],
+        floorplan_variant: 'solo_studio'
+      },
+      {
+        name: 'Twin Sharing Room',
         area_sqft: 210,
         monthly_rent_inr: 6500,
         deposit_inr: 10000,
@@ -165,7 +226,7 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
         floorplan_variant: 'twin_pod'
       },
       {
-        name: 'Triple Sharing Ladies Room',
+        name: 'Triple Sharing Room',
         area_sqft: 260,
         monthly_rent_inr: 5500,
         deposit_inr: 8000,
@@ -185,6 +246,11 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     travel_time: '8 mins',
     address: 'Masthikate road, Moodbidri, Karnataka 574227',
     phone: '073381 75375',
+    image_url: '/images/new-royal-pg.jpg',
+    food_plan: 'Mess Optional / Room Only',
+    curfew_timing: '11:00 PM Keyless',
+    wifi_speed: '200 Mbps Broadband',
+    power_backup: '24/7 Inverter Backup',
     tagline: 'Modern Boys PG on Masthikate Road with Direct MITE Transit Access',
     description:
       'Conveniently situated on Masthikate Road with quick access to gyms, cafes, and MITE college buses. Clean tiled rooms with dedicated high-speed Wi-Fi.',
@@ -193,7 +259,7 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     highlights: ['Prime Masthikate Road access', '8 mins commute to MITE', 'Flexible meal plans'],
     rooms: [
       {
-        name: 'Executive Single Pod',
+        name: 'Single Room',
         area_sqft: 170,
         monthly_rent_inr: 8500,
         deposit_inr: 15000,
@@ -202,13 +268,22 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
         floorplan_variant: 'solo_studio'
       },
       {
-        name: 'Twin Sharing Standard',
+        name: 'Twin Sharing Room',
         area_sqft: 225,
         monthly_rent_inr: 6000,
         deposit_inr: 10000,
         available_count: 6,
         features: ['Twin Beds', 'Separate Lockers', 'Balcony Access', 'Wi-Fi & Cleaning'],
         floorplan_variant: 'twin_pod'
+      },
+      {
+        name: 'Triple Sharing Room',
+        area_sqft: 275,
+        monthly_rent_inr: 5000,
+        deposit_inr: 8000,
+        available_count: 5,
+        features: ['3 Beds', 'Shared Balcony', 'Hot Water Geyser', 'Wi-Fi & Cleaning'],
+        floorplan_variant: 'triple_loft'
       }
     ]
   },
@@ -222,6 +297,11 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     travel_time: '8 mins',
     address: '3X5R+726, Nelligudde Rd, near Nishmitha Travels Maintenance Unit, Moodbidri, Karnataka 574227',
     phone: null,
+    image_url: '/images/masthikatte-boys-hostel.jpg',
+    food_plan: '3-Time Coastal Mess',
+    curfew_timing: '10:00 PM Warden Gate',
+    wifi_speed: '100 Mbps Fiber',
+    power_backup: '24/7 Power Backup',
     tagline: 'Verified Agent-Managed Boys Hostel off Nelligudde Road',
     description:
       'Quiet residential boys hostel near Nishmitha Travels on Nelligudde Road. Verified directly by CampusNest field agents for clean rooms and reliable student stays.',
@@ -230,7 +310,16 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     highlights: ['Book & tour exclusively via CampusNest Agent', 'Quiet off-road lane', '8 mins from MITE'],
     rooms: [
       {
-        name: 'Twin Hostel Room',
+        name: 'Single Room',
+        area_sqft: 155,
+        monthly_rent_inr: 7500,
+        deposit_inr: 12000,
+        available_count: 2,
+        features: ['Single Cot', 'Study Desk', 'Attached Bath', 'Agent Verified Rate'],
+        floorplan_variant: 'solo_studio'
+      },
+      {
+        name: 'Twin Sharing Room',
         area_sqft: 215,
         monthly_rent_inr: 5800,
         deposit_inr: 10000,
@@ -239,7 +328,7 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
         floorplan_variant: 'twin_pod'
       },
       {
-        name: 'Triple Student Dorm',
+        name: 'Triple Sharing Room',
         area_sqft: 270,
         monthly_rent_inr: 4900,
         deposit_inr: 8000,
@@ -259,6 +348,11 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     travel_time: '10 mins',
     address: '3X9V+8C6, Moodbidri, Karnataka 574227',
     phone: '098805 99424',
+    image_url: '/images/rb-lodge-pg.jpg',
+    food_plan: 'Room Only / Tiffin Tie-up',
+    curfew_timing: '24/7 Reception Access',
+    wifi_speed: '150 Mbps Fiber',
+    power_backup: '24/7 Generator Backup',
     tagline: 'Private Room Flexibility & Long-Stay Student PG in Town Center',
     description:
       'Ideal for MITE students or visiting parents seeking lodge-grade maintenance with monthly PG affordability right inside Moodbidri town.',
@@ -267,22 +361,31 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     highlights: ['Great for solo rooms & short-notice stays', '10 min drive to MITE', 'Close to pharmacies & eateries'],
     rooms: [
       {
-        name: 'Solo Lodge-Grade PG Room',
+        name: 'Single Room',
         area_sqft: 195,
         monthly_rent_inr: 9200,
         deposit_inr: 15000,
         available_count: 3,
-        features: ['Private Ensuite', 'TV & Study Table', 'Daily Room Care', 'No Curfew Restrictions'],
+        features: ['Private Ensuite', 'Study Table', 'Daily Room Care', '24/7 Reception'],
         floorplan_variant: 'solo_studio'
       },
       {
-        name: 'Double Sharing PG Suite',
+        name: 'Twin Sharing Room',
         area_sqft: 240,
         monthly_rent_inr: 6800,
         deposit_inr: 12000,
         available_count: 4,
         features: ['2 Beds', 'Attached Bath', 'Balcony Option', 'Wi-Fi Included'],
         floorplan_variant: 'balcony_loft'
+      },
+      {
+        name: 'Triple Sharing Room',
+        area_sqft: 290,
+        monthly_rent_inr: 5700,
+        deposit_inr: 10000,
+        available_count: 4,
+        features: ['3 Beds', 'Attached Bath', 'Daily Housekeeping', 'Wi-Fi Included'],
+        floorplan_variant: 'triple_loft'
       }
     ]
   },
@@ -296,6 +399,11 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     travel_time: '10 mins',
     address: '6, Moodabidri, Moodbidri, Karnataka 574227',
     phone: '096111 59622',
+    image_url: '/images/shalimar-boys-hostel.jpg',
+    food_plan: 'Mess Optional / Nearby Dining',
+    curfew_timing: '10:30 PM Caretaker Gate',
+    wifi_speed: '100 Mbps Broadband',
+    power_backup: '24/7 Inverter Backup',
     tagline: 'Established Moodbidri Boys Hostel with Spacious Rooms',
     description:
       'Long-standing student hostel in central Moodbidri known among MITE seniors for spacious corridors, reliable water supply, and easy access to town bus stops.',
@@ -304,7 +412,16 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     highlights: ['10 mins from MITE via town shuttle', 'Budget-friendly deposits', 'Walkable to central market'],
     rooms: [
       {
-        name: 'Twin Sharing Hostel Room',
+        name: 'Single Room',
+        area_sqft: 160,
+        monthly_rent_inr: 7400,
+        deposit_inr: 12000,
+        available_count: 2,
+        features: ['Private Room', 'Study Table', 'Bike Parking', 'Wi-Fi Access'],
+        floorplan_variant: 'solo_studio'
+      },
+      {
+        name: 'Twin Sharing Room',
         area_sqft: 220,
         monthly_rent_inr: 5700,
         deposit_inr: 10000,
@@ -313,13 +430,13 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
         floorplan_variant: 'twin_pod'
       },
       {
-        name: 'Quad Student Room',
-        area_sqft: 320,
+        name: 'Triple Sharing Room',
+        area_sqft: 290,
         monthly_rent_inr: 4800,
         deposit_inr: 8000,
         available_count: 4,
-        features: ['4 Study Spaces', 'Wall Storage', 'Cross-Ventilation', 'Wi-Fi Access'],
-        floorplan_variant: 'quad_suite'
+        features: ['3 Study Spaces', 'Wall Storage', 'Cross-Ventilation', 'Wi-Fi Access'],
+        floorplan_variant: 'triple_loft'
       }
     ]
   },
@@ -333,6 +450,11 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     travel_time: '11 mins',
     address: '2nd floor, Prabhu Complex, behind Bus Stand Road, Moodbidri, Karnataka 574227',
     phone: '096863 72192',
+    image_url: '/images/shri-brahmi-pg.jpg',
+    food_plan: 'Veg Tiffin & Mess Option',
+    curfew_timing: '9:30 PM Complex Gate',
+    wifi_speed: '100 Mbps Fiber',
+    power_backup: '24/7 Inverter Backup',
     tagline: 'Steps from Moodbidri Main Bus Stand — Easy MITE Commute',
     description:
       'Located on the 2nd floor of Prabhu Complex right behind Bus Stand Road, giving students immediate access to express buses, stationery stores, and clinics.',
@@ -341,7 +463,16 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     highlights: ['Behind Bus Stand Road', '11 mins to MITE campus', 'Commercial complex security'],
     rooms: [
       {
-        name: 'Twin Sharing PG Unit',
+        name: 'Single Room',
+        area_sqft: 155,
+        monthly_rent_inr: 7800,
+        deposit_inr: 12000,
+        available_count: 2,
+        features: ['Single Cot', 'Study Desk', 'CCTV Corridor', 'Wi-Fi Included'],
+        floorplan_variant: 'solo_studio'
+      },
+      {
+        name: 'Twin Sharing Room',
         area_sqft: 200,
         monthly_rent_inr: 6300,
         deposit_inr: 10000,
@@ -350,7 +481,7 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
         floorplan_variant: 'twin_pod'
       },
       {
-        name: 'Triple Sharing PG Unit',
+        name: 'Triple Sharing Room',
         area_sqft: 255,
         monthly_rent_inr: 5300,
         deposit_inr: 8000,
@@ -370,6 +501,11 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     travel_time: '12 mins',
     address: 'Ponnechari Road, opposite to Nature Ice Cream, Moodbidri, Karnataka 574227',
     phone: null,
+    image_url: '/images/samrudhi-ladies-pg.jpg',
+    food_plan: '100% Pure Veg Home Kitchen',
+    curfew_timing: '8:00 PM Family Gate',
+    wifi_speed: '100 Mbps Fiber',
+    power_backup: 'Solar + Inverter Backup',
     tagline: 'Pure Vegetarian Ladies PG on Ponnechari Road — Agent Verified',
     description:
       'Dedicated pure-vegetarian ladies PG opposite Nature Ice Cream on Ponnechari Road. Quiet, clean, and family-run—tours and room holds coordinated through CampusNest Agents.',
@@ -378,7 +514,16 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     highlights: ['Pure Vegetarian kitchen & utensils', 'Book tour via CampusNest Agent', 'Opposite Nature Ice Cream'],
     rooms: [
       {
-        name: 'Twin Veg Ladies Room',
+        name: 'Single Pure-Veg Room',
+        area_sqft: 165,
+        monthly_rent_inr: 8400,
+        deposit_inr: 14000,
+        available_count: 2,
+        features: ['Pure Veg Home Meals', 'Private Study Desk', 'Attached Bath', 'Gated Entry'],
+        floorplan_variant: 'solo_studio'
+      },
+      {
+        name: 'Twin Sharing Room',
         area_sqft: 215,
         monthly_rent_inr: 6800,
         deposit_inr: 12000,
@@ -387,7 +532,7 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
         floorplan_variant: 'twin_pod'
       },
       {
-        name: 'Triple Veg Ladies Room',
+        name: 'Triple Sharing Room',
         area_sqft: 270,
         monthly_rent_inr: 5600,
         deposit_inr: 10000,
@@ -407,6 +552,11 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
     travel_time: '13 mins',
     address: '9-58 B, Range Forest Office Road, Hanumanth Nagar, Veena, Moodbidri, Karnataka 574227',
     phone: null,
+    image_url: '/images/veena-pg.jpg',
+    food_plan: 'Homestyle 3-Time Meals',
+    curfew_timing: '9:00 PM Family Gate',
+    wifi_speed: '100 Mbps Broadband',
+    power_backup: '24/7 Inverter Backup',
     tagline: 'Serene Residential Paying Guest Stay in Hanumanth Nagar',
     description:
       'Peaceful family-style PG nestled on Range Forest Office Road in Hanumanth Nagar. Ideal for students preferring quiet neighborhood living, verified and scheduled by CampusNest Agents.',
@@ -424,13 +574,22 @@ const REAL_MITE_DIRECTORY: RealPropertySeed[] = [
         floorplan_variant: 'solo_studio'
       },
       {
-        name: 'Twin Sharing Residential Room',
+        name: 'Twin Sharing Room',
         area_sqft: 225,
         monthly_rent_inr: 5900,
         deposit_inr: 10000,
         available_count: 4,
         features: ['Twin Beds', 'Cupboards', 'Attached Bath', 'Home Meals'],
         floorplan_variant: 'twin_pod'
+      },
+      {
+        name: 'Triple Sharing Room',
+        area_sqft: 270,
+        monthly_rent_inr: 5000,
+        deposit_inr: 8000,
+        available_count: 4,
+        features: ['3 Beds', 'Cupboards', 'Ventilated Windows', 'Home Meals'],
+        floorplan_variant: 'triple_loft'
       }
     ]
   }
@@ -442,9 +601,13 @@ export function seedDatabase() {
   const countRow = db.prepare('SELECT COUNT(*) as count FROM properties').get() as { count: number | bigint } | undefined;
   const count = Number(countRow?.count ?? 0);
 
-  // Also verify if the first record matches MITE Boy's Hostel (ensures replacement if old prototype rows somehow persisted)
-  const firstProp = db.prepare('SELECT slug FROM properties ORDER BY id ASC LIMIT 1').get() as { slug?: string } | undefined;
-  if (count === REAL_MITE_DIRECTORY.length && firstProp?.slug === 'mite-boys-hostel') {
+  const firstRoomCountRow = db
+    .prepare('SELECT COUNT(*) as count FROM room_types WHERE property_id = (SELECT id FROM properties ORDER BY id ASC LIMIT 1)')
+    .get() as { count: number | bigint } | undefined;
+  const firstRoomCount = Number(firstRoomCountRow?.count ?? 0);
+
+  const firstProp = db.prepare('SELECT slug, image_url FROM properties ORDER BY id ASC LIMIT 1').get() as { slug?: string; image_url?: string } | undefined;
+  if (count === REAL_MITE_DIRECTORY.length && firstProp?.slug === 'mite-boys-hostel' && firstRoomCount === 3 && Boolean(firstProp?.image_url)) {
     return;
   }
 
@@ -464,10 +627,11 @@ export function seedDatabase() {
     const insertProperty = db.prepare(`
       INSERT INTO properties (
         slug, name, category, city, neighborhood, distance_km, travel_time,
-        distance_to_campus, address, phone, tagline, description,
+        distance_to_campus, address, phone, image_url, food_plan, curfew_timing,
+        wifi_speed, power_backup, tagline, description,
         starting_rent_inr, total_beds, available_beds, accent_theme,
         amenities_json, highlights_json
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `);
 
     const insertRoomType = db.prepare(`
@@ -513,6 +677,11 @@ export function seedDatabase() {
         distanceLabel,
         item.address,
         item.phone,
+        item.image_url,
+        item.food_plan,
+        item.curfew_timing,
+        item.wifi_speed,
+        item.power_backup,
         item.tagline,
         item.description,
         startingRent,
@@ -546,7 +715,6 @@ export function seedDatabase() {
       }
     }
 
-    // MITE & Moodbidri Community Events
     insertEvent.run(
       'MITE Freshers Hostel & PG Orientation Walk',
       'Community Dinner',
@@ -576,7 +744,6 @@ export function seedDatabase() {
       12
     );
 
-    // Agent-Mediated Starter Bookings (using exact real properties & new workflow statuses)
     const pDaya = insertedPropertyIds[2];
     const pShama = insertedPropertyIds[3];
     const pMasthikatte = insertedPropertyIds[5];
@@ -667,9 +834,8 @@ export function seedDatabase() {
   }
 }
 
-// Run immediately if executed directly via CLI
 if (process.argv[1] && process.argv[1].endsWith('seed.ts')) {
   seedDatabase();
-  console.log('Seed executed cleanly with 11 MITE/Moodbidri properties.');
+  console.log('Seed executed cleanly with 11 MITE/Moodbidri properties and 3 room tiers each.');
   process.exit(0);
 }

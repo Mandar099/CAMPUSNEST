@@ -1,5 +1,10 @@
+/*
+From Uiverse.io by anand_4957 - https://uiverse.io/anand_4957/moody-ladybug-99
+MIT License, Copyright (c) anand_4957 (Anand Kotadiya)
+*/
 import React, { useEffect, useState } from 'react';
 import { isReducedMotion } from '../lib/motion';
+import styles from './Preloader.module.css';
 
 interface PreloaderProps {
   onComplete?: () => void;
@@ -9,6 +14,14 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [fading, setFading] = useState(false);
 
+  const dismiss = () => {
+    setFading(true);
+    setTimeout(() => {
+      setIsVisible(false);
+      onComplete?.();
+    }, 300);
+  };
+
   useEffect(() => {
     if (isReducedMotion()) {
       setIsVisible(false);
@@ -16,11 +29,12 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
       return;
     }
 
-    const fadeTimer = setTimeout(() => setFading(true), 220);
+    // Fade out cleanly after ~1.1s; hard safety timeout ensures it never blocks UI
+    const fadeTimer = setTimeout(() => setFading(true), 950);
     const hideTimer = setTimeout(() => {
       setIsVisible(false);
       onComplete?.();
-    }, 520);
+    }, 1300);
 
     return () => {
       clearTimeout(fadeTimer);
@@ -32,25 +46,46 @@ export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
 
   return (
     <div
-      aria-hidden="true"
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-obsidian text-alabaster transition-opacity duration-300 ${
-        fading ? 'opacity-0 pointer-events-none' : 'opacity-100'
-      }`}
+      role="status"
+      aria-label="Loading CampusNest Moodbidri"
+      className={`${styles.overlay} ${fading ? styles.overlayHidden : ''}`}
     >
-      <div className="flex flex-col items-center max-w-sm px-6 text-center">
-        <div className="w-12 h-12 mb-4">
-          <svg viewBox="0 0 48 48" fill="none" className="w-full h-full">
-            <rect width="48" height="48" rx="12" fill="#24272D" />
-            <path d="M12 34V14L24 7L36 14V34L24 41L12 34Z" stroke="#D95D39" strokeWidth="2.5" strokeLinejoin="round" />
-            <circle cx="24" cy="24" r="5" fill="#2E6F5E" />
-          </svg>
+      <div className={styles.longfazers} aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <div className={styles.stage} aria-hidden="true">
+        <div className={styles.loader}>
+          <span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+          <div className={styles.base}>
+            <span></span>
+            <div className={styles.face}></div>
+          </div>
         </div>
-        <div className="font-display text-xl font-bold tracking-tight text-white">
+      </div>
+
+      <div className="mt-4 text-center px-6 relative z-10">
+        <div className="font-display font-extrabold text-lg tracking-tight text-obsidian" translate="no">
           CAMPUS<span className="text-terracotta">NEST</span>
         </div>
-        <div className="font-mono text-[11px] text-parchment-200 tracking-widest uppercase mt-1">
-          Moodbidri · MITE Directory
-        </div>
+        <p className="font-mono text-xs text-slate-700 tracking-wide mt-1">
+          Loading CampusNest Moodbidri…
+        </p>
+        <button
+          type="button"
+          onClick={dismiss}
+          className="mt-4 font-mono text-[11px] uppercase tracking-wider text-slate-600 hover:text-obsidian underline underline-offset-4"
+        >
+          Skip Intro
+        </button>
       </div>
     </div>
   );

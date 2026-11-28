@@ -28,6 +28,21 @@ function formatProperty(prop: any, rooms: any[]) {
     distance_to_campus: prop.distance_to_campus,
     address: prop.address,
     phone: prop.phone ?? null,
+    image_url: prop.image_url,
+    gallery_images: prop.gallery_images_json
+      ? JSON.parse(prop.gallery_images_json)
+      : [
+          prop.image_url,
+          Number(prop.id) % 2 === 1 ? '/images/gallery-single-room.jpg' : '/images/gallery-twin-sharing.jpg',
+          Number(prop.id) % 2 === 1 ? '/images/gallery-study-desk.jpg' : '/images/amenity-wifi-study.jpg',
+          String(prop.food_plan || '').toLowerCase().includes('veg') || Number(prop.id) % 2 === 0
+            ? '/images/gallery-south-thali.jpg'
+            : '/images/amenity-mess-dining.jpg'
+        ],
+    food_plan: prop.food_plan,
+    curfew_timing: prop.curfew_timing,
+    wifi_speed: prop.wifi_speed,
+    power_backup: prop.power_backup,
     tagline: prop.tagline,
     description: prop.description,
     starting_rent_inr: Number(prop.starting_rent_inr),

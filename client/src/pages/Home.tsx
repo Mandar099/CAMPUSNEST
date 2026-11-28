@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { Property, CommunityEvent } from '../types';
 import { Hero } from '../components/Hero';
+import { AgentWorkflowStrip } from '../components/AgentWorkflowStrip';
 import { LocationsGrid } from '../components/LocationsGrid';
 import { AmenitiesBento } from '../components/AmenitiesBento';
 import { RoomCarousel } from '../components/RoomCarousel';
@@ -49,7 +50,7 @@ export const Home: React.FC<HomeProps> = ({
       }
 
       return true;
-    });
+    }).sort((a, b) => a.distance_km - b.distance_km);
   }, [properties, selectedCategory, maxDistanceKm, maxBudget]);
 
   const handleHeroSearch = () => {
@@ -84,7 +85,12 @@ export const Home: React.FC<HomeProps> = ({
         onOpenBooking={onOpenBooking}
       />
 
-      {/* 2. Real MITE & Moodbidri PG Directory */}
+      {/* 2. How CampusNest Agent Works (3-Step Visual Strip) */}
+      <AgentWorkflowStrip
+        onOpenBooking={() => onOpenBooking(properties[0]?.id ?? 1, undefined, 'booking')}
+      />
+
+      {/* 3. Real MITE & Moodbidri PG Directory */}
       <LocationsGrid
         properties={filteredProperties}
         allPropertiesCount={properties.length}

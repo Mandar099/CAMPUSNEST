@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Search, MapPin, ShieldCheck, SlidersHorizontal, Navigation } from 'lucide-react';
 import gsap from 'gsap';
 import { isReducedMotion } from '../lib/motion';
@@ -29,6 +29,7 @@ export const Hero: React.FC<HeroProps> = ({
 }) => {
   const heroRef = useRef<HTMLDivElement>(null);
   const headlineRef = useRef<HTMLHeadingElement>(null);
+  const [heroImgError, setHeroImgError] = useState(false);
 
   useEffect(() => {
     if (isReducedMotion() || !headlineRef.current) return;
@@ -83,11 +84,25 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
           </div>
 
-          {/* Right Column: MITE Commute Corridor Visual + Intermediary Summary */}
+          {/* Right Column: Editorial Campus Photography + MITE Commute Corridor */}
           <div className="hero-stagger lg:col-span-5 space-y-4">
-            <div className="p-4 rounded-2xl bg-white border border-parchment-200 shadow-architectural">
+            <div className="p-4 rounded-2xl bg-white border border-parchment-200 shadow-architectural space-y-4">
+              {!heroImgError ? (
+                <div className="relative rounded-xl overflow-hidden border border-parchment-200 bg-alabaster aspect-[16/9]">
+                  <img
+                    src="/images/mite-boys-hostel.jpg"
+                    alt="Sunlit coastal residence near MITE Badagumijaru campus"
+                    onError={() => setHeroImgError(true)}
+                    className="w-full h-full object-cover sepia-[0.06] contrast-[1.02]"
+                  />
+                  <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between gap-2 px-3 py-1.5 rounded-lg bg-obsidian/85 backdrop-blur-sm text-white font-mono text-[11px]">
+                    <span>Badagumijaru · MITE Campus Belt</span>
+                    <span className="text-terracotta-300 font-semibold tabular-nums">11 Verified Stays</span>
+                  </div>
+                </div>
+              ) : null}
               <MiteCorridorMap />
-              <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-parchment-200">
+              <div className="grid grid-cols-2 gap-3 pt-4 border-t border-parchment-200">
                 <div>
                   <div className="font-mono text-[11px] uppercase tracking-wider text-slate-600">MITE Radius</div>
                   <div className="font-display font-bold text-xl text-obsidian tabular-nums">0.35 – 5.3 km</div>

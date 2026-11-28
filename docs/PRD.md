@@ -1,100 +1,44 @@
 # CAMPUSNEST — PRODUCT REQUIREMENTS DOCUMENT (PRD)
 
 ## 1. Executive Summary & Product Vision
-**CampusNest** is an all-inclusive, design-led student accommodation and co-living platform built specifically for premier collegiate and tech hubs in South India: **Moodbidri** (near MITE), **Mangaluru** (Surathkal Tech Corridor), **Manipal** (Eshwar Nagar / MIT hub), and **Bengaluru** (Electronic City Phase 1).
+**CampusNest** is a verified student accommodation directory and zero-brokerage agent-mediated booking platform serving **MITE (Mangalore Institute of Technology & Engineering)** students and guardians across **Badagumijaru, Todaru, and Moodbidri town, Karnataka**.
 
-Unlike fragmented hostel booking directories or generic rental portals, CampusNest delivers an editorial modern architectural hospitality experience. It pairs institutional-grade security and academic-focused amenities with a seamless digital journey—combining real-time bed inventory, transparent all-inclusive INR pricing, multi-channel booking, and an operational property management dashboard.
+Unlike generic rental aggregators with stale listings and unverified phone numbers, CampusNest combines exact MITE gate commute distances, live bed inventory, transparent monthly INR mess/AC cost estimators, a 4-photo deep-dive inspection modal, side-by-side stay comparisons, and local agent coordination into an editorial hospitality experience.
 
 ---
 
 ## 2. Target Personas & User Stories
 
 ### Persona 1: Prospective Student (Primary Consumer)
-- **Profile:** 18–23-year-old undergraduate or postgraduate engineering/design/medical student relocating away from home.
-- **Pain Points:** Hidden utility fees, unreliable Wi-Fi, cramped noisy rooms, lack of hygienic food, and unclear availability before travel.
+- **Profile:** 18–23-year-old B.E. / M.Tech / MBA student joining MITE Moodbidri.
+- **Pain Points:** Unclear distances from Badagumijaru campus, surprise mess/AC charges, unavailable PG phone numbers, and lack of verified photos before travel.
 - **User Stories:**
-  - *As a student*, I want to filter residences by campus proximity, room tier (Solo Studio, Twin Pod, Balcony Loft), and maximum monthly budget in ₹, so that I find housing suited to my budget without cross-referencing maps.
-  - *As a student*, I want to inspect 2D architectural floor plans, furnishing specifications, and bed availability before visiting.
-  - *As a student*, I want to reserve a room or schedule an on-site/virtual tour online and receive an instant booking pass with a verifiable reference code.
+  - *As a student*, I want to filter all 11 Moodbidri PGs and hostels by category (`Boys`, `Ladies`, `On-Campus`, `Pure Veg`, `Under 4 km from MITE`, `Has Direct Phone`), maximum distance, and budget in ₹.
+  - *As a student*, I want to inspect a 4-photo gallery (`Exterior`, `Bedroom`, `Study & Wi-Fi`, `Dining & Mess`), nearby MITE landmarks, house rules, and transparent deposit/mess calculations.
+  - *As a student*, I want to compare up to 3 stays side-by-side and book an agent-coordinated tour, live video walkthrough, or callback with an instant `CN-2026-XXXX` reservation pass and one-click WhatsApp agent handoff.
 
 ### Persona 2: Guardian / Parent (Decision Maker & Trust Anchor)
-- **Profile:** 42–55-year-old parent funding accommodation, deeply concerned with safety, nutritional quality, and academic discipline.
-- **Pain Points:** Safety ambiguity, unauthorized guest policies, unhygienic kitchens, unvetted roommates, and opaque deposit refund terms.
+- **Profile:** Parent funding housing, focused on safety, curfew timing, pure-veg dining, and power/water reliability.
 - **User Stories:**
-  - *As a guardian*, I want clear verification of 24/7 biometric security, continuous CCTV monitoring, on-premise warden presence, and power backup.
-  - *As a guardian*, I want full visibility into all-inclusive costs (rent, high-speed Wi-Fi, housekeeping, laundry, chef-curated mess meals, security deposit) without hidden electricity surcharges.
-  - *As a guardian*, I want the option to book a guided virtual or on-site tour before executing a financial commitment.
+  - *As a guardian*, I want immediate visibility into curfew rules, food plans (`4-Meal Campus Mess Included`, `Pure Veg Home-Style Mess`, etc.), Wi-Fi speeds, and power backup per stay.
+  - *As a guardian*, I want direct click-to-call owner phone links where published, and reliable CampusNest agent mediation where owners operate via on-site caretakers (`Contact via CampusNest Agent`).
 
-### Persona 3: Property Operations Admin (Internal Stakeholder)
-- **Profile:** CampusNest residence manager overseeing occupancy, resident check-ins, room allocations, and maintenance.
-- **Pain Points:** Spreadsheets going out of sync, double-booking rooms during peak admission weeks, and manual follow-ups on tour leads.
+### Persona 3: Moodbidri Agent & Operations Admin
+- **Profile:** Local CampusNest coordinator verifying bed counts, calling owners, scheduling student tours, and locking rates at ₹0 brokerage.
 - **User Stories:**
-  - *As a property manager*, I want an executive operational dashboard displaying live bed counts and applicant queues filtered by property and status.
-  - *As a property manager*, I want to transition booking statuses (`Pending` → `Confirmed` → `Visited` → `Cancelled`) with instant persistence to SQLite.
-  - *As a property manager*, I want to manually adjust room inventory and bed availability counters when walk-in allocations happen.
+  - *As an agent admin*, I want to manage lead statuses (`New Lead` → `Contacted Owner` → `Tour Scheduled` → `Confirmed` → `Cancelled`), look up PG owner contacts, and adjust live bed counts per room tier.
 
 ---
 
-## 3. Scope & Feature Requirements
-
-### 3.1 Public Guest Experience
-1. **Interactive Hero Availability Bar:**
-   - Multi-criteria filter: Campus/City selector, Room Tier, Max Monthly Budget (₹).
-   - Instant smooth scroll to matching properties with automated room highlighting.
-2. **Campus Properties Showcase:**
-   - 4 foundational properties:
-     - *CampusNest Parkside* (Moodbidri — 400m from MITE)
-     - *CampusNest Harbor View* (Mangaluru — Surathkal Tech Corridor)
-     - *CampusNest Scholar's Loft* (Manipal — Eshwar Nagar)
-     - *CampusNest Innovation Hub* (Bengaluru — Electronic City Phase 1)
-   - Metrics: Distance to campus (meters/km), starting rent, total vs. available beds, neighborhood badges.
-3. **All-Inclusive Living Bento Grid:**
-   - Categorized tabs: Academic & Wi-Fi (1 Gbps redundant line, acoustic study booths), 24/7 Security (biometric turnstiles, warden desk), Smart Living (app-driven laundry, 100% DG power backup), Food & Wellness (4-meal chef-crafted regional menu, fitness loft).
-4. **Room Tier & Floor Plan Carousel:**
-   - High-fidelity room cards with area (sq.ft), monthly rent (₹), deposit (₹), live inventory counter, and feature pills.
-   - Interactive 2D architectural floor plan preview toggle per room tier.
-   - All-Inclusive Pricing Modal detailing complete breakdown with zero surprise fees.
-5. **Community Rhythm & Events Feed:**
-   - Campus events feed (Hackathon nights, wellness yoga, community dinners, career talks) with live remaining spot indicators.
-6. **Multi-Step Slide-Over Booking Drawer:**
-   - Step 1: Property and room tier pre-selection.
-   - Step 2: Personal information (Full name, student/guardian role, verified contact).
-   - Step 3: Tour type selection (On-Site physical walk-through or 360° virtual live call) and move-in date.
-   - Step 4: Submission with instant generation of format `CN-2026-XXXX`, printable/copyable confirmation pass.
-7. **Newsletter & Community Subscription:**
-   - Email subscription for campus admission alert updates.
-
-### 3.2 Property Admin Experience
-1. **Protected Dashboard Access (`/admin`):**
-   - Streamlined authentication with pre-filled reviewer demo credentials (`admin@campusnest.in` / `campus2026`).
-2. **Operations Summary Metrics:**
-   - Real-time aggregate statistics: Total Properties, Total Bed Capacity, Occupancy Rate %, Pending Applications, Confirmed Bookings.
-3. **Bookings Management Table:**
-   - Sortable, searchable table displaying applicant details, property, room tier, tour preference, move-in target, and status badge.
-   - Actionable status transitions (`Pending` -> `Confirmed` -> `Visited` -> `Cancelled`) via direct API calls.
-4. **Room Inventory Control:**
-   - Live increment/decrement controls for available beds per room tier with real-time database synchronisation.
-
----
-
-## 4. Acceptance Criteria & Non-Functional Requirements
-
-### 4.1 Functional Acceptance Criteria
-- **AC-1:** Form validation rejects malformed email addresses, Indian phone numbers not conforming to 10 digits, and missing applicant roles using strict Zod schemas on both client and server.
-- **AC-2:** Submitting a booking immediately persists a record in SQLite and returns a status 201 response containing a unique `CN-2026-XXXX` reference code.
-- **AC-3:** Updating bed availability via Admin immediately reflects on the public landing page bed counters without requiring a server reboot.
-- **AC-4:** Filter bar updates smoothly recalculate matched listings and scroll into view.
-
-### 4.2 Non-Functional Criteria
-- **Zero External Image Dependencies:** 100% custom SVG architectural illustrations and CSS geometric drawings to prevent external CDN/Unsplash 404s.
-- **Performance:** Sub-200ms API response time on SQLite queries with WAL mode enabled.
-- **Accessibility & Motion:** All animations must respect `prefers-reduced-motion: reduce`. Keyboard navigable inputs and full ARIA drawer states.
-- **Data Integrity:** Foreign key enforcement in SQLite (`PRAGMA foreign_keys = ON`).
-
----
-
-## 5. Edge Cases & Error Handling
-1. **Zero Availability:** When available beds reach 0, the room tier displays a prominent `Waitlist Only` status badge and the booking drawer marks the selection as waitlist confirmation.
-2. **Concurrent Booking Attempts:** SQLite WAL mode ensures transactional safety and thread-safe serial writes.
-3. **Invalid Parameter Queries:** Properties and bookings endpoints return standardized JSON errors (`{ error: string, details?: any }`) with status codes 400, 404, or 500.
-4. **Network Glitches / Offline:** Frontend API wrapper intercepts connection timeouts and displays user-friendly retry banners.
+## 3. Implemented Features
+1. **Interactive Hero Availability Bar:** Filter by PG category, max distance from MITE (`≤ 1.5 km`, `≤ 4.0 km`, `≤ 4.8 km`, all), and monthly budget (`₹4,800`–`₹12,000`).
+2. **3-Step "How CampusNest Agent Works" Visual Strip:** Clear overview of Compare → Schedule Visit/Callback → Lock Rate at ₹0 brokerage.
+3. **MITE & Moodbidri 11-PG Directory (`LocationsGrid`):**
+   - Sorted closest to MITE (`0.35 km` to `5.3 km`) by default, with sort controls (`Nearest to MITE`, `Rent: Low to High`, `Most Beds Left`).
+   - Quick filter pills (`All (11)`, `Boys`, `Ladies`, `On-Campus`, `Under 4 km from MITE`, `Has Direct Phone`, `Pure Veg`) + keyword search.
+   - Direct `tel:` owner call links, Google Maps pin links, WhatsApp Agent handoff buttons, and up-to-3 side-by-side `ComparisonModal`.
+4. **4-Photo Property Detail Modal (`PropertyDetailModal`):** Gallery tab switcher (`Exterior`, `Bedroom`, `Study & Wi-Fi`, `Dining & Mess`), fee transparency breakdown, nearby MITE landmarks, house rules, and direct booking triggers.
+5. **Room Configurations & True Monthly Cost Estimator (`RoomCarousel`):** Live 2D CAD floor-plan toggle, sharing tier + mess plan + AC estimator, and full pricing modal.
+6. **4-Step Agent Booking Drawer (`BookingDrawer`):** Est. monthly rent calculator, Zod-validated applicant inputs, tour/callback mode selection, instant `CN-2026-XXXX` pass, 1-page `@media print` pass isolation, and WhatsApp Agent handoff.
+7. **Admin Console (`AdminDashboard` at `#admin` / `/admin`):** Lead pipeline management, owner contact directory, and live bed inventory updates.
+8. **Offline / Serverless Resilience:** `fallbackProperties.ts` mirrors all 11 PGs and 33 room tiers seamlessly when deployed to serverless hosts like Vercel without persistent disk.

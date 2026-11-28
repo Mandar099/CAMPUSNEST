@@ -10,7 +10,8 @@ import {
   ArrowRight,
   Flame,
   Clock,
-  MapPin
+  MapPin,
+  Calculator
 } from 'lucide-react';
 
 interface RoomCarouselProps {
@@ -30,6 +31,20 @@ export const RoomCarousel: React.FC<RoomCarouselProps> = ({
   const [viewingFloorPlan, setViewingFloorPlan] = useState<Record<number, boolean>>({});
   const [breakdownRoom, setBreakdownRoom] = useState<RoomType | null>(null);
 
+  // Interactive Monthly Cost & Mess Calculator State
+  const [calcRoomIdx, setCalcRoomIdx] = useState<number>(0);
+  const [calcMessPlan, setCalcMessPlan] = useState<'included' | 'veg_tiffin' | 'room_only'>('included');
+  const [calcCooling, setCalcCooling] = useState<'non_ac' | 'ac'>('non_ac');
+
+  useEffect(() => {
+    setCalcRoomIdx(0);
+    if (currentProperty?.food_plan?.toLowerCase().includes('room only')) {
+      setCalcMessPlan('room_only');
+    } else {
+      setCalcMessPlan('included');
+    }
+  }, [currentProperty?.id, currentProperty?.food_plan]);
+
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && breakdownRoom) {
@@ -48,6 +63,25 @@ export const RoomCarousel: React.FC<RoomCarouselProps> = ({
   };
 
   if (!currentProperty) return null;
+
+  const isMessIncludedByDefault =
+    !currentProperty.food_plan.toLowerCase().includes('room only') &&
+    !currentProperty.food_plan.toLowerCase().includes('optional');
+  const calcSelectedRoom = currentProperty.room_types[calcRoomIdx] || currentProperty.room_types[0];
+  const messAddonInr =
+    calcMessPlan === 'included'
+      ? (isMessIncludedByDefault ? 0 : 2600)
+      : calcMessPlan === 'veg_tiffin'
+        ? 2200
+        : isMessIncludedByDefault
+          ? -1000
+          : 0;
+  const acAddonInr = calcCooling === 'ac' ? 1500 : 0;
+  const estimatedMonthlyTotal = Math.max(
+    4200,
+    (calcSelectedRoom?.monthly_rent_inr || currentProperty.starting_rent_inr) + messAddonInr + acAddonInr
+  );
+  const estimatedDeposit = calcSelectedRoom?.deposit_inr || 12000;
 
   return (
     <section id="rooms" className="py-16 md:py-24 bg-white border-b border-parchment-200">
@@ -115,6 +149,147 @@ export const RoomCarousel: React.FC<RoomCarouselProps> = ({
           </div>
           <div className="flex items-center gap-2 text-sage-700 font-semibold tabular-nums">
             <span>{currentProperty.available_beds} Total Beds Remaining</span>
+          </div>
+        </div>
+
+        {/* Interactive True Monthly Cost & Mess Estimator */}
+        <div className="mb-8 rounded-2xl bg-alabaster border border-parchment-300 p-5 sm:p-6 shadow-architectural">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="space-y-4 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-white border border-parchment-300 font-mono text-[11px] font-bold uppercase text-terracotta-700">
+                  <Calculator className="w-3.5 h-3.5" aria-hidden="true" />
+                  <span>True Monthly Cost &amp; Mess Estimator</span>
+                </span>
+                <span className="font-mono text-xs text-slate-600">
+                  Policy: <strong className="text-obsidian">{currentProperty.food_plan}</strong>
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
+                {/* Sharing Tier */}
+                <div className="space-y-1.5">
+                  <span className="block text-[11px] uppercase tracking-wider text-slate-600 font-semibold">
+                    1. Sharing Tier
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {currentProperty.room_types.map((r, idx) => (
+                      <button
+                        key={r.id}
+                        type="button"
+                        onClick={() => setCalcRoomIdx(idx)}
+                        className={`px-2.5 py-1.5 rounded-lg border transition-colors ${
+                          calcRoomIdx === idx
+                            ? 'bg-obsidian text-white border-obsidian font-semibold'
+                            : 'bg-white border-parchment-200 text-slate-700 hover:border-obsidian'
+                        }`}
+                      >
+                        {r.name.replace(' Room', '')}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Mess Plan */}
+                <div className="space-y-1.5">
+                  <span className="block text-[11px] uppercase tracking-wider text-slate-600 font-semibold">
+                    2. Food &amp; Mess Plan
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setCalcMessPlan('included')}
+                      className={`px-2.5 py-1.5 rounded-lg border transition-colors ${
+                        calcMessPlan === 'included'
+                          ? 'bg-sage text-white border-sage font-semibold'
+                          : 'bg-white border-parchment-200 text-slate-700 hover:border-obsidian'
+                      }`}
+                    >
+                      {isMessIncludedByDefault ? '3-Time Mess (Incl.)' : '3-Time Mess (+₹2.6k)'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCalcMessPlan('veg_tiffin')}
+                      className={`px-2.5 py-1.5 rounded-lg border transition-colors ${
+                        calcMessPlan === 'veg_tiffin'
+                          ? 'bg-sage text-white border-sage font-semibold'
+                          : 'bg-white border-parchment-200 text-slate-700 hover:border-obsidian'
+                      }`}
+                    >
+                      B&amp;D Tiffin (+₹2.2k)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCalcMessPlan('room_only')}
+                      className={`px-2.5 py-1.5 rounded-lg border transition-colors ${
+                        calcMessPlan === 'room_only'
+                          ? 'bg-sage text-white border-sage font-semibold'
+                          : 'bg-white border-parchment-200 text-slate-700 hover:border-obsidian'
+                      }`}
+                    >
+                      Room Only
+                    </button>
+                  </div>
+                </div>
+
+                {/* Cooling / AC */}
+                <div className="space-y-1.5">
+                  <span className="block text-[11px] uppercase tracking-wider text-slate-600 font-semibold">
+                    3. Cooling Option
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => setCalcCooling('non_ac')}
+                      className={`px-2.5 py-1.5 rounded-lg border transition-colors ${
+                        calcCooling === 'non_ac'
+                          ? 'bg-terracotta text-white border-terracotta font-semibold'
+                          : 'bg-white border-parchment-200 text-slate-700 hover:border-obsidian'
+                      }`}
+                    >
+                      Non-AC (+₹0)
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCalcCooling('ac')}
+                      className={`px-2.5 py-1.5 rounded-lg border transition-colors ${
+                        calcCooling === 'ac'
+                          ? 'bg-terracotta text-white border-terracotta font-semibold'
+                          : 'bg-white border-parchment-200 text-slate-700 hover:border-obsidian'
+                      }`}
+                    >
+                      AC (+₹1,500)
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Live Estimator Readout */}
+            <div className="flex flex-col sm:flex-row lg:flex-col items-start sm:items-center lg:items-end justify-between gap-3 pt-4 lg:pt-0 lg:pl-6 border-t lg:border-t-0 lg:border-l border-parchment-300 min-w-[240px]">
+              <div className="lg:text-right tabular-nums">
+                <div className="font-mono text-[11px] uppercase tracking-wider text-slate-600">
+                  Estimated All-Inclusive / Mo
+                </div>
+                <div className="font-display font-extrabold text-3xl text-obsidian">
+                  ₹{estimatedMonthlyTotal.toLocaleString('en-IN')}
+                </div>
+                <div className="font-mono text-[11px] text-slate-600">
+                  + ₹{estimatedDeposit.toLocaleString('en-IN')} refundable deposit · ₹0 brokerage
+                </div>
+              </div>
+
+              {calcSelectedRoom && (
+                <button
+                  type="button"
+                  onClick={() => onOpenBooking(currentProperty.id, calcSelectedRoom.id, 'booking')}
+                  className="px-4 py-2.5 rounded-xl bg-obsidian hover:bg-slate-800 text-white font-mono text-xs uppercase tracking-wider font-semibold transition-colors flex items-center gap-2 whitespace-nowrap"
+                >
+                  <span>Lock ₹{estimatedMonthlyTotal.toLocaleString('en-IN')} Plan</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-terracotta" aria-hidden="true" />
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
@@ -266,8 +441,8 @@ export const RoomCarousel: React.FC<RoomCarouselProps> = ({
                 <span className="font-bold text-obsidian">Included</span>
               </div>
               <div className="flex justify-between py-2 border-b border-parchment-200">
-                <span className="text-slate-700">Daily Meals / Mess (as per PG plan)</span>
-                <span className="font-bold text-sage-700">Included</span>
+                <span className="text-slate-700">Dining Policy ({currentProperty.food_plan})</span>
+                <span className="font-bold text-sage-700">{isMessIncludedByDefault ? 'Included' : 'Optional'}</span>
               </div>
               <div className="flex justify-between py-2 border-b border-parchment-200">
                 <span className="text-slate-700">CampusNest Agent Coordination Fee</span>

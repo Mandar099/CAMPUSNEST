@@ -23,6 +23,12 @@ export interface Property {
   distance_to_campus: string;
   address: string;
   phone: string | null;
+  image_url: string;
+  gallery_images?: string[];
+  food_plan: string;
+  curfew_timing: string;
+  wifi_speed: string;
+  power_backup: string;
   tagline: string;
   description: string;
   starting_rent_inr: number;

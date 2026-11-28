@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Property, CommunityEvent } from './types';
 import { fetchProperties, fetchEvents } from './lib/api';
+import { FALLBACK_PROPERTIES, FALLBACK_EVENTS } from './data/fallbackProperties';
 import { initSmoothScroll, destroySmoothScroll } from './lib/motion';
 import { Preloader } from './components/Preloader';
 import { Navbar } from './components/Navbar';
@@ -10,8 +11,8 @@ import { AdminDashboard } from './pages/AdminDashboard';
 
 export const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<'home' | 'admin'>('home');
-  const [properties, setProperties] = useState<Property[]>([]);
-  const [events, setEvents] = useState<CommunityEvent[]>([]);
+  const [properties, setProperties] = useState<Property[]>(FALLBACK_PROPERTIES);
+  const [events, setEvents] = useState<CommunityEvent[]>(FALLBACK_EVENTS);
 
   // Booking Drawer State
   const [isBookingOpen, setIsBookingOpen] = useState(false);

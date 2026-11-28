@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Property, BookingFormData, Booking, TourType } from '../types';
 import { createBooking } from '../lib/api';
+import { buildAgentWhatsAppUrl } from '../lib/whatsapp';
 import {
   X,
   Check,
@@ -13,7 +14,9 @@ import {
   ArrowRight,
   ArrowLeft,
   AlertTriangle,
-  Phone
+  Phone,
+  MessageCircle,
+  UtensilsCrossed
 } from 'lucide-react';
 
 interface BookingDrawerProps {
@@ -46,6 +49,8 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
   const [tourType, setTourType] = useState<TourType>(initialMode === 'callback' ? 'Agent Callback' : 'On-Site');
   const [moveInDate, setMoveInDate] = useState('2026-08-01');
   const [notes, setNotes] = useState('');
+  const [messPreference, setMessPreference] = useState<'included' | 'tiffin' | 'room_only'>('included');
+  const [acPreference, setAcPreference] = useState<'non_ac' | 'ac'>('non_ac');
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -95,6 +100,23 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
 
   const selectedProperty = properties.find(p => p.id === propertyId) || properties[0];
   const selectedRoom = selectedProperty?.room_types.find(r => r.id === roomId) || selectedProperty?.room_types[0];
+  const isMessIncludedByProp =
+    selectedProperty &&
+    !selectedProperty.food_plan.toLowerCase().includes('room only') &&
+    !selectedProperty.food_plan.toLowerCase().includes('optional');
+  const messDelta =
+    messPreference === 'included'
+      ? (isMessIncludedByProp ? 0 : 2600)
+      : messPreference === 'tiffin'
+        ? 2200
+        : isMessIncludedByProp
+          ? -1000
+          : 0;
+  const acDelta = acPreference === 'ac' ? 1500 : 0;
+  const estimatedMonthlyTotal = Math.max(
+    4200,
+    (selectedRoom?.monthly_rent_inr || selectedProperty?.starting_rent_inr || 5000) + messDelta + acDelta
+  );
 
   const validateStep2 = () => {
     if (fullName.trim().length < 2) {
@@ -131,6 +153,12 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
     setIsSubmitting(true);
 
     try {
+      const messLabel =
+        messPreference === 'included' ? '3-Time Mess' : messPreference === 'tiffin' ? 'B&D Tiffin' : 'Room Only';
+      const acLabel = acPreference === 'ac' ? 'AC Requested' : 'Non-AC';
+      const planPrefix = `[Est. ₹${estimatedMonthlyTotal.toLocaleString('en-IN')}/mo · ${messLabel} · ${acLabel}]`;
+      const combinedNotes = notes.trim() ? `${planPrefix} ${notes.trim()}` : planPrefix;
+
       const payload: BookingFormData = {
         property_id: propertyId,
         room_type_id: roomId,
@@ -140,7 +168,7 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
         applicant_role: applicantRole,
         tour_type: tourType,
         preferred_move_in: moveInDate,
-        notes: notes.trim()
+        notes: combinedNotes
       };
 
       const response = await createBooking(payload);
@@ -297,6 +325,54 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                         </div>
                       </button>
                     ))}
+                  </div>
+                </div>
+              )}
+
+              {selectedProperty && (
+                <div className="p-4 rounded-xl bg-alabaster border border-parchment-200 space-y-3 font-mono text-xs">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="inline-flex items-center gap-1.5 font-semibold uppercase text-slate-700">
+                      <UtensilsCrossed className="w-3.5 h-3.5 text-sage" aria-hidden="true" />
+                      <span>3. Food &amp; AC Cost Estimator</span>
+                    </span>
+                    <span className="font-bold text-terracotta-700 tabular-nums">
+                      Est. ₹{estimatedMonthlyTotal.toLocaleString('en-IN')}/mo
+                    </span>
+                  </div>
+
+                  <div className="flex flex-wrap gap-1.5">
+                    {(
+                      [
+                        { id: 'included', label: isMessIncludedByProp ? 'Mess Included' : 'Full Mess (+₹2.6k)' },
+                        { id: 'tiffin', label: '2-Time Tiffin (+₹2.2k)' },
+                        { id: 'room_only', label: 'Room Only' }
+                      ] as const
+                    ).map((opt) => (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => setMessPreference(opt.id)}
+                        className={`px-2.5 py-1.5 rounded-lg border transition-colors ${
+                          messPreference === opt.id
+                            ? 'bg-obsidian text-white border-obsidian font-semibold'
+                            : 'bg-white border-parchment-200 text-slate-700 hover:border-obsidian'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => setAcPreference((prev) => (prev === 'non_ac' ? 'ac' : 'non_ac'))}
+                      className={`px-2.5 py-1.5 rounded-lg border transition-colors ${
+                        acPreference === 'ac'
+                          ? 'bg-terracotta text-white border-terracotta font-semibold'
+                          : 'bg-white border-parchment-200 text-slate-700 hover:border-obsidian'
+                      }`}
+                    >
+                      {acPreference === 'ac' ? 'AC (+₹1,500)' : 'Non-AC (+₹0)'}
+                    </button>
                   </div>
                 </div>
               )}
@@ -486,8 +562,14 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                   <span className="font-semibold text-obsidian text-right">{selectedRoom?.name}</span>
                 </div>
                 <div className="flex justify-between gap-2">
-                  <span className="text-slate-600">Monthly Rent:</span>
-                  <span className="font-bold text-terracotta-700">₹{selectedRoom?.monthly_rent_inr.toLocaleString('en-IN')}/mo</span>
+                  <span className="text-slate-600">Dining &amp; Cooling Plan:</span>
+                  <span className="font-semibold text-obsidian text-right">
+                    {messPreference === 'included' ? '3-Time Mess' : messPreference === 'tiffin' ? '2-Time Tiffin' : 'Room Only'} · {acPreference === 'ac' ? 'AC' : 'Non-AC'}
+                  </span>
+                </div>
+                <div className="flex justify-between gap-2">
+                  <span className="text-slate-600">Estimated Monthly Rent:</span>
+                  <span className="font-bold text-terracotta-700">₹{estimatedMonthlyTotal.toLocaleString('en-IN')}/mo</span>
                 </div>
               </div>
             </div>
@@ -565,6 +647,25 @@ export const BookingDrawer: React.FC<BookingDrawerProps> = ({
                   <span className="tracking-widest" aria-hidden="true">||| | |||| | ||| |||| |</span>
                 </div>
               </div>
+
+              {/* One-Click WhatsApp Agent Handoff */}
+              <a
+                href={buildAgentWhatsAppUrl({
+                  propertyName: confirmedBooking.property_name,
+                  distanceKm: selectedProperty?.distance_km,
+                  roomName: confirmedBooking.room_name,
+                  studentName: confirmedBooking.full_name,
+                  moveInDate: confirmedBooking.preferred_move_in,
+                  referenceCode: confirmedBooking.reference_code,
+                  monthlyEstimateInr: estimatedMonthlyTotal
+                })}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-3.5 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-mono text-xs uppercase tracking-wider font-semibold shadow-sm transition-colors flex items-center justify-center gap-2"
+              >
+                <MessageCircle className="w-4 h-4" aria-hidden="true" />
+                <span>WhatsApp Agent Now (Send {confirmedBooking.reference_code})</span>
+              </a>
 
               {/* Actions */}
               <div className="flex gap-3">
